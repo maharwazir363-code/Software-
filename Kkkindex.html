@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AL SHOAIB TRADERS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700;800&display=swap');
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f8fafc; color: #0f172a; min-height: 100vh; }
+.card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+.btn { padding: 9px 16px; border-radius: 8px; font-weight: 700; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; border: 0; }
+.btn-blue { background: #2563eb; color: white; } .btn-blue:hover { background: #1d4ed8; }
+.btn-green { background: #16a34a; color: white; } .btn-green:hover { background: #15803d; }
+.btn-dark { background: #0f172a; color: white; } .btn-dark:hover { background: #1e293b; }
+.btn-red { background: #dc2626; color: white; } .btn-red:hover { background: #b91c1c; }
+input, select { width: 100%; padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; outline: none; font-size: 13px; font-weight: 600; }
+input:focus, select:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+table { width: 100%; border-collapse: collapse; }
+th { background: #f1f5f9; color: #475569; font-weight: 700; font-size: 12px; padding: 11px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+td { padding: 11px; border-bottom: 1px solid #f1f5f9; font-size: 13px; font-weight: 500; }
+[data-lp] { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; cursor: pointer; }
+[data-lp]:active { background: #f1f5f9; }
+.page { display: none; } .page.active { display: block; }
+.ac-wrap { position: relative; }
+.ac-box { position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; box-shadow: 0 6px 16px rgba(0,0,0,0.12); max-height: 190px; overflow-y: auto; z-index: 45; display: none; }
+.ac-box.show { display: block; }
+.ac-item { padding: 8px 12px; font-size: 12.5px; font-weight: 600; cursor: pointer; border-bottom: 1px solid #f1f5f9; }
+.ac-item:last-child { border-bottom: 0; }
+.ac-item:hover, .ac-item.hl { background: #eff6ff; color: #1d4ed8; }
+.ac-item small { display: block; font-weight: 500; color: #94a3b8; }
+input[readonly] { background: #f1f5f9 !important; color: #475569; cursor: not-allowed; border-style: dashed; }
+.f-err { border-color: #dc2626 !important; box-shadow: 0 0 0 3px rgba(220,38,38,0.1) !important; }
+.f-ok { border-color: #16a34a !important; }
+.f-err-msg { color: #dc2626; font-size: 11px; font-weight: 700; margin-top: 2px; display: none; }
+.f-err-msg.show { display: block; }
+.btn-outline { background: #fff; color: #2563eb; border: 1.5px solid #2563eb; }
+.btn-outline:hover { background: #eff6ff; }
+.nav-btn { display: flex; align-items: center; gap: 10px; width: 100%; padding: 11px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #94a3b8; margin-bottom: 2px; text-align: left; background: transparent; border: 0; cursor: pointer; }
+.nav-btn:hover, .nav-btn.active { background: #1e293b; color: #38bdf8; }
+</style>
+</head>
+<body class="flex flex-col min-h-screen antialiased">
+<div id="authScreen" class="fixed inset-0 z-50 bg-slate-900 flex items-center justify-center p-4 overflow-y-auto">
+ <div class="w-full max-w-sm bg-white rounded-2xl p-6 space-y-5 shadow-xl">
+  <div class="text-center space-y-2">
+   <div class="w-14 h-14 mx-auto bg-blue-600 rounded-xl flex items-center justify-center text-white text-2xl"><i class="fa-solid fa-shop"></i></div>
+   <h1 id="authShop" class="text-3xl font-black tracking-wide text-slate-900 uppercase leading-tight">AL SHOAIB TRADERS</h1>
+   <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Login</p>
+  </div>
+  <div class="space-y-3">
+   <div><label class="text-xs font-bold text-slate-600 mb-1 block">Username</label><input id="authUser" autocomplete="username" placeholder="Username" value="Shoaib" onkeydown="if(event.key==='Enter')document.getElementById('authPass').focus()"></div>
+   <div><label class="text-xs font-bold text-slate-600 mb-1 block">Password</label><input id="authPass" type="password" autocomplete="current-password" placeholder="Password" onkeydown="if(event.key==='Enter')authSubmit()"></div>
+   <label class="flex items-center gap-2 text-xs font-semibold text-slate-600 cursor-pointer"><input type="checkbox" class="w-4 h-4" style="width:16px" onchange="document.getElementById('authPass').type = this.checked ? 'text' : 'password'"> Password dikhayein</label>
+   <p id="authMsg" class="text-xs font-bold text-red-600 hidden"></p>
+   <button class="btn btn-blue w-full py-3 text-sm justify-center" onclick="authSubmit()">Login</button>
+  </div>
+ </div>
+</div>
+<header class="bg-slate-900 text-white px-5 py-3 flex justify-between items-center sticky top-0 z-30 shadow">
+ <div class="flex items-center gap-3">
+  <button onclick="toggleSide()" class="lg:hidden text-slate-300 text-lg"><i class="fa-solid fa-bars"></i></button>
+  <div class="flex items-center gap-2">
+   <div class="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center text-white text-xs font-bold">
+    <i class="fa-solid fa-shop"></i>
+   </div>
+   <span class="font-extrabold text-base tracking-wide" id="topShopTitle">AL SHOAIB TRADERS</span>
+  </div>
+ </div>
+</header>
+<div class="flex-1 flex">
+<aside class="w-60 bg-slate-900 text-white fixed inset-y-0 left-0 z-40 transform -translate-x-full lg:translate-x-0 lg:static transition duration-200 flex flex-col pt-14 lg:pt-3" id="side">
+ <nav class="px-3 flex-1 overflow-y-auto space-y-1">
+  <button onclick="nav('dashboard')" class="nav-btn active"><i class="fa-solid fa-chart-line w-4"></i> Dashboard</button>
+  <button onclick="nav('sale')" class="nav-btn"><i class="fa-solid fa-cart-shopping w-4"></i> New Sale</button>
+  <button onclick="nav('customer-ledger')" class="nav-btn"><i class="fa-solid fa-address-book w-4"></i> Customer Ledger</button>
+  <button onclick="nav('routes')" class="nav-btn"><i class="fa-solid fa-route w-4"></i> Routes & Recovery</button>
+  <button onclick="nav('bulk-wasooli')" class="nav-btn"><i class="fa-solid fa-hand-holding-dollar w-4"></i> Route Wasooli Sheet</button>
+  <button onclick="nav('purchase')" class="nav-btn"><i class="fa-solid fa-truck-ramp-box w-4"></i> New Purchase</button>
+  <button onclick="nav('stock')" class="nav-btn"><i class="fa-solid fa-boxes-stacked w-4"></i> Stock Ledger History</button>
+  <button onclick="nav('salesman-master')" class="nav-btn"><i class="fa-solid fa-user-plus w-4"></i> Add Salesman</button>
+  <button onclick="nav('salesman-rep')" class="nav-btn"><i class="fa-solid fa-user-tie w-4"></i> Salesman Performance</button>
+  <button onclick="nav('expenses')" class="nav-btn"><i class="fa-solid fa-receipt w-4"></i> Expenses Log</button>
+  <button onclick="nav('history')" class="nav-btn"><i class="fa-solid fa-clock-rotate-left w-4"></i> Sales / Purchase History</button>
+  <button onclick="nav('reports')" class="nav-btn"><i class="fa-solid fa-file-invoice-dollar w-4"></i> Business Report</button>
+  <button onclick="nav('settings')" class="nav-btn"><i class="fa-solid fa-gear w-4"></i> Settings & Backup</button>
+ </nav>
+ <div class="px-3 pb-4 pt-2 border-t border-slate-800">
+  <button onclick="logout()" class="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold text-sm py-2.5 rounded-lg"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+ </div>
+</aside>
+<main class="flex-1 p-4 md:p-6 max-w-7xl mx-auto w-full space-y-5">
+ <section id="dashboard" class="page active space-y-5">
+  <h1 class="text-xl font-extrabold text-slate-800">Executive Dashboard</h1>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+   <div class="card"><small class="text-slate-500 font-bold text-xs uppercase">Today's Sale</small><b id="dSale" class="text-xl block font-extrabold mt-1 text-blue-600">Rs. 0</b></div>
+   <div class="card"><small class="text-slate-500 font-bold text-xs uppercase">Today's Purchase</small><b id="dPurchase" class="text-xl block font-extrabold mt-1">Rs. 0</b></div>
+   <div class="card"><small class="text-slate-500 font-bold text-xs uppercase">Expenses</small><b id="dExpense" class="text-xl block font-extrabold mt-1 text-red-600">Rs. 0</b></div>
+   <div class="card"><small class="text-slate-500 font-bold text-xs uppercase">1-Week Net Profit</small><b id="dProfit" class="text-xl block font-extrabold mt-1 text-emerald-600">Rs. 0</b></div>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+   <div class="card space-y-2"><h3 class="text-xs font-bold text-slate-700 uppercase">Top Selling Items</h3><canvas id="chartTopItems"></canvas></div>
+   <div class="card space-y-2"><h3 class="text-xs font-bold text-slate-700 uppercase">Top Customers</h3><canvas id="chartTopCustomers"></canvas></div>
+   <div class="card space-y-2"><h3 class="text-xs font-bold text-slate-700 uppercase">1-Week Profit Trend</h3><canvas id="chartProfitTrend"></canvas></div>
+  </div>
+  <div class="card space-y-2">
+   <h3 class="text-xs font-bold text-slate-700 uppercase border-b pb-1">Low Stock Alerts</h3>
+   <div id="lowStockList" class="text-xs text-slate-500 py-2">Koi item low stock par nahi hai.</div>
+  </div>
+  <div class="card space-y-2">
+   <h3 class="text-xs font-bold text-slate-700 uppercase border-b pb-1">AI Smart Purchase Recommendations</h3>
+   <div id="aiRecommendationsList" class="text-xs text-slate-500 py-2">Koi recommendation available nahi hai.</div>
+  </div>
+ </section>
+ <section id="sale" class="page space-y-4">
+  <h1 class="text-xl font-extrabold text-slate-800">New Sale Billing</h1>
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+   <div class="lg:col-span-2 card space-y-3">
+    <div class="flex flex-wrap gap-2 pb-1">
+     <button type="button" class="btn btn-outline text-xs py-1.5 px-3" onclick="openAddCustomerModal()"><i class="fa-solid fa-user-plus"></i> Add New Customer</button>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+     <div class="ac-wrap"><label class="text-xs font-bold text-slate-600 mb-1 block">Customer Name</label><input id="sCustomer" placeholder="Customer Name (saved customer likhein)" autocomplete="off"><p class="f-err-msg" id="sCustomerErr">Yeh customer system mein save nahi hai. "Add New Customer" se save karein.</p><div class="ac-box" id="sCustomerAc"></div></div>
+     <div><label class="text-xs font-bold text-slate-600 mb-1 block">Customer Address/Area</label><input id="sAddress" placeholder="e.g. Main Bazar / Route A"></div>
+     <div class="ac-wrap"><label class="text-xs font-bold text-slate-600 mb-1 block">Salesman Name</label><input id="sSalesman" placeholder="Salesman Name (saved salesman likhein)" autocomplete="off"><p class="f-err-msg" id="sSalesmanErr">Yeh salesman system mein save nahi hai. "Add New Salesman" se save karein.</p><div class="ac-box" id="sSalesmanAc"></div></div>
+    </div>
+    <div class="border rounded-lg p-3 bg-slate-50 space-y-2">
+     <div class="flex justify-between items-center pb-1"><span class="text-xs font-bold text-slate-700">Sale Items</span><button class="btn btn-blue text-xs py-1 px-3" onclick="addSaleRow()">+ Add Item</button></div>
+     <div id="saleRows" class="space-y-2"></div>
+    </div>
+   </div>
+   <div class="card space-y-3 flex flex-col justify-between">
+    <div class="space-y-3">
+     <div class="flex items-center justify-between border-b pb-2 gap-2"><h3 class="text-sm font-bold text-slate-800">Invoice Summary</h3><div class="flex items-center gap-1.5"><span class="text-[11px] font-bold text-slate-500">Invoice #</span><input id="sInvoice" readonly tabindex="-1" title="Invoice number khud lagta hai, change nahi hota" style="width:92px;padding:5px 8px;font-size:12px;text-align:center;font-weight:800"></div></div>
+     <div class="flex justify-between text-xs font-semibold text-slate-600"><span>Grand Total:</span><b id="sTotal" class="text-blue-600 font-extrabold text-lg">Rs. 0</b></div>
+     <div><label class="text-xs font-bold text-slate-600 mb-1 block">Cash Received</label><input id="sPaid" type="number" value="0" oninput="calcSaleTotal()" class="font-bold text-emerald-600 text-sm"></div>
+     <div class="flex justify-between text-xs font-bold text-slate-700"><span>Pending Balance:</span><b id="sBalance" class="text-red-600">Rs. 0</b></div>
+     <div class="p-2.5 bg-amber-50 border border-amber-200 rounded-lg text-xs">
+      <label class="flex items-center gap-2 cursor-pointer font-bold text-amber-900">
+       <input type="checkbox" id="chkPrevBalance" class="w-4 h-4"> [✓] Add Previous Balance Note in PDF
+      </label>
+     </div>
+    </div>
+    <div class="grid grid-cols-2 gap-2">
+     <button class="btn btn-blue py-3 text-sm justify-center" onclick="saveSale()"><i class="fa-solid fa-floppy-disk"></i> Save Sale</button>
+     <button class="btn btn-dark py-3 text-sm justify-center" onclick="downloadSaleInvoicePDF()"><i class="fa-solid fa-file-pdf"></i> PDF Bill</button>
+    </div>
+    <button class="btn btn-green py-3 text-sm justify-center w-full" onclick="shareSaleWhatsApp()"><i class="fa-brands fa-whatsapp"></i> WhatsApp (PDF Bill Bhejain)</button>
+   </div>
+  </div>
+ </section>
+ <section id="customer-ledger" class="page space-y-4">
+  <h1 class="text-xl font-extrabold text-slate-800">Customer Account Ledger</h1>
+  <div class="card space-y-3">
+   <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+    <div class="ac-wrap"><label class="text-xs font-bold text-slate-600 mb-1 block">Customer Name Search</label><input id="ledgerCustomer" placeholder="Customer Name likhein..." autocomplete="off"><div class="ac-box"></div></div>
+    <div class="flex items-end"><button class="btn btn-blue w-full justify-center" onclick="generateCustomerLedger()"><i class="fa-solid fa-magnifying-glass"></i> View Account Statement</button></div>
+   </div>
+  </div>
+  <div class="card space-y-3" id="ledgerOutputBox">
+   <p class="text-xs text-slate-400 py-3 text-center">Pehle upar customer select karke 'View Account Statement' par click karein.</p>
+  </div>
+ </section>
+ <section id="routes" class="page space-y-4">
+  <h1 class="text-xl font-extrabold text-slate-800">Route & Udhaar Recovery Search</h1>
+  <div class="card space-y-3">
+   <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+    <div class="ac-wrap"><label class="text-xs font-bold text-slate-600 mb-1 block">Salesman Name</label><input id="rSalesman" placeholder="Salesman Name" autocomplete="off"><div class="ac-box"></div></div>
+    <div class="ac-wrap"><label class="text-xs font-bold text-slate-600 mb-1 block">Route / Area Name</label><input id="rRoute" placeholder="Route / Area Name" autocomplete="off"><div class="ac-box"></div></div>
+    <div><label class="text-xs font-bold text-slate-600 mb-1 block">Date Filter</label><input id="rDate" type="date"></div>
+   </div>
+   <button class="btn btn-blue" onclick="searchRouteCustomers()">Search Pending Customers</button>
+  </div>
+  <div class="card space-y-2">
+   <h3 class="text-xs font-bold uppercase border-b pb-1 text-slate-700">Pending Balance Customers List</h3>
+   <div id="routeResultTable" class="overflow-x-auto"></div>
+  </div>
+ </section>
+ <section id="bulk-wasooli" class="page space-y-4">
+  <h1 class="text-xl font-extrabold text-slate-800">Daily Route Wasooli Sheet</h1>
+  <div class="card space-y-3">
+   <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+    <div><label class="text-xs font-bold text-slate-600 mb-1 block">Date</label><input id="wDate" type="date"></div>
+    <div class="ac-wrap"><label class="text-xs font-bold text-slate-600 mb-1 block">Salesman Name</label><input id="wSalesman" placeholder="Salesman Name" autocomplete="off"><div class="ac-box"></div></div>
+   </div>
+   <div class="space-y-2">
+    <h3 class="text-xs font-bold uppercase border-b pb-1 text-slate-700">Customer Wasooli Entries</h3>
+    <div id="wasooliRows" class="space-y-2"></div>
+    <button class="btn btn-dark text-xs py-1.5" onclick="addWasooliRow()">+ Add Customer Row</button>
+   </div>
+   <div class="flex justify-between items-center pt-3 border-t">
+    <span class="text-sm font-extrabold text-slate-800">Total Wasooli Today: <b id="wTotal" class="text-emerald-600 text-lg">Rs. 0</b></span>
+    <div class="flex flex-wrap gap-2">
+     <button class="btn btn-blue" onclick="saveBulkWasooli()"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+     <button class="btn btn-dark" onclick="downloadWasooliPDF()"><i class="fa-solid fa-file-pdf"></i> PDF Save</button>
+     <button class="btn btn-green" onclick="shareWasooliWhatsApp()"><i class="fa-brands fa-whatsapp"></i> WhatsApp</button>
+    </div>
+   </div>
+  </div>
+ </section>
+ <section id="purchase" class="page space-y-4">
+  <h1 class="text-xl font-extrabold text-slate-800">New Purchase (Company Stock In)</h1>
+  <div class="card space-y-3">
+   <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+    <div><label class="text-xs font-bold text-slate-600 mb-1 block">Company / Supplier Name</label><input id="pCompany" placeholder="Company Name"></div>
+    <div><label class="text-xs font-bold text-slate-600 mb-1 block">Date</label><input id="pDate" type="date"></div>
+    <div><label class="text-xs font-bold text-slate-600 mb-1 block">Invoice No (auto)</label><input id="pInvoice" readonly tabindex="-1" title="Invoice number khud lagta hai, change nahi hota" style="font-weight:800"></div>
+   </div>
+   <div class="border rounded-lg p-3 bg-slate-50 space-y-2">
+    <div class="flex justify-between items-center pb-1"><span class="text-xs font-bold text-slate-700">Purchased Items</span><button class="btn btn-blue text-xs py-1 px-3" onclick="addPurchaseRow()">+ Add Item</button></div>
+    <div id="purchaseRows" class="space-y-2"></div>
+   </div>
+   <div class="flex justify-between items-center pt-3 border-t">
+    <span class="text-sm font-extrabold text-slate-800">Total Purchase Amount: <b id="pTotal" class="text-blue-600 text-lg">Rs. 0</b></span>
+    <button class="btn btn-blue" onclick="savePurchase()">Save Stock Purchase Entry</button>
+   </div>
+  </div>
+ </section>
+ <section id="stock" class="page space-y-4">
+  <h1 class="text-xl font-extrabold text-slate-800">Stock & Item History Search</h1>
+  <div class="card space-y-2">
+   <h3 class="text-xs font-bold uppercase border-b pb-1 text-slate-700">Current Stock Levels</h3>
+   <div id="currentStockList" class="overflow-x-auto"></div>
+  </div>
+  <div class="card space-y-3">
+   <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+    <div class="ac-wrap"><label class="text-xs font-bold text-slate-600 mb-1 block">Search Item Name</label><input id="stkSearch" placeholder="Item Name" autocomplete="off"><div class="ac-box"></div></div>
+    <div><label class="text-xs font-bold text-slate-600 mb-1 block">From Date</label><input id="stkFrom" type="date"></div>
+    <div><label class="text-xs font-bold text-slate-600 mb-1 block">To Date</label><input id="stkTo" type="date"></div>
+   </div>
+   <button class="btn btn-dark" onclick="searchStockHistory()">Search Stock Ledger</button>
+  </div>
+  <div class="card space-y-2">
+   <h3 class="text-xs font-bold uppercase border-b pb-1 text-slate-700">Stock Ledger Result</h3>
+   <div id="stockResultTable" class="overflow-x-auto"></div>
+  </div>
+ </section>
+ <section id="salesman-master" class="page space-y-4">
+  <h1 class="text-xl font-extrabold text-slate-800">Add Salesman</h1>
+  <div class="card space-y-3">
+   <h3 class="text-sm font-bold border-b pb-2 text-slate-800"><i class="fa-solid fa-plus text-blue-600"></i> Naya Salesman Save Karein</h3>
+   <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+    <div><label class="text-xs font-bold text-slate-600 mb-1 block">Salesman Name</label><input id="smName" placeholder="Salesman Name"></div>
+    <div><label class="text-xs font-bold text-slate-600 mb-1 block">Mobile Number</label><input id="smPhone" placeholder="03xx-xxxxxxx"></div>
+    <div class="flex items-end"><button class="btn btn-blue w-full justify-center" onclick="addSalesmanMaster()"><i class="fa-solid fa-floppy-disk"></i> Save Salesman</button></div>
+   </div>
+  </div>
+  <div class="card space-y-2">
+   <h3 class="text-xs font-bold uppercase border-b pb-1 text-slate-700">Saved Salesmen List</h3>
+   <div id="salesmanMasterList" class="overflow-x-auto"></div>
+  </div>
+ </section>
+ <section id="salesman-rep" class="page space-y-4">
+  <h1 class="text-xl font-extrabold text-slate-800">Salesman Performance Report</h1>
+  <div class="card space-y-3">
+   <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+    <div class="ac-wrap"><label class="text-xs font-bold text-slate-600 mb-1 block">Salesman Name</label><input id="repSalesman" placeholder="Salesman Name" autocomplete="off"><div class="ac-box"></div></div>
+    <div><label class="text-xs font-bold text-slate-600 mb-1 block">From Date</label><input id="repFrom" type="date"></div>
+    <div><label class="text-xs font-bold text-slate-600 mb-1 block">To Date</label><input id="repTo" type="date"></div>
+   </div>
+   <button class="btn btn-blue" onclick="generateSalesmanReport()">Generate Salesman PDF Report</button>
+  </div>
+  <div class="card space-y-2" id="salesmanReportOutput"></div>
+ </section>
+ <section id="expenses" class="page space-y-4">
+  <h1 class="text-xl font-extrabold text-slate-800">Shop Expenses Log</h1>
+  <div class="card space-y-3">
+   <h3 class="text-sm font-bold border-b pb-2 text-slate-800"><i class="fa-solid fa-plus text-red-600"></i> Naya Expense Save Karein</h3>
+   <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+    <div><label class="text-xs font-bold text-slate-600 mb-1 block">Expense Title</label><input id="expTitle" placeholder="e.g. Bijli / Rent / Staff"></div>
+    <div><label class="text-xs font-bold text-slate-600 mb-1 block">Amount (Rs)</label><input id="expAmount" type="number" placeholder="0"></div>
+    <div><label class="text-xs font-bold text-slate-600 mb-1 block">Date</label><input id="expDate" type="date"></div>
+    <div><label class="text-xs font-bold text-slate-600 mb-1 block">Note / Details</label><input id="expNote" placeholder="Note details..."></div>
+   </div>
+   <div class="pt-2">
+    <button class="btn btn-red" onclick="addExpense()"><i class="fa-solid fa-floppy-disk"></i> Save Expense</button>
+   </div>
+  </div>
+  <div class="card space-y-3">
+   <h3 class="text-sm font-bold border-b pb-2 text-slate-800"><i class="fa-solid fa-magnifying-glass text-blue-600"></i> Purane Expenses ki List Nikalein</h3>
+   <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+    <div><label class="text-xs font-bold text-slate-600 mb-1 block">From Date</label><input id="expFrom" type="date"></div>
+    <div><label class="text-xs font-bold text-slate-600 mb-1 block">To Date</label><input id="expTo" type="date"></div>
+    <div class="flex items-end"><button class="btn btn-blue w-full justify-center" onclick="searchExpenses()"><i class="fa-solid fa-magnifying-glass"></i> Search</button></div>
+   </div>
+   <div id="expenseTable" class="overflow-x-auto"><p class="text-xs text-slate-400 py-3">From aur To date select karke Search dabayen.</p></div>
+   <div id="expActions" class="hidden flex flex-wrap gap-2 pt-2 border-t">
+    <button class="btn btn-dark" onclick="downloadExpensePDF()"><i class="fa-solid fa-file-pdf"></i> PDF Save</button>
+    <button class="btn btn-green" onclick="shareExpenseWhatsApp()"><i class="fa-brands fa-whatsapp"></i> WhatsApp Share</button>
+   </div>
+  </div>
+ </section>
+ <section id="history" class="page space-y-4">
+  <h1 class="text-xl font-extrabold text-slate-800">Sales & Purchase History</h1>
+  <div class="card space-y-3">
+   <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+    <div><label class="text-xs font-bold text-slate-600 mb-1 block">From Date</label><input id="hFrom" type="date"></div>
+    <div><label class="text-xs font-bold text-slate-600 mb-1 block">To Date</label><input id="hTo" type="date"></div>
+    <div class="flex items-end"><button class="btn btn-dark w-full" onclick="filterHistory()">Search History</button></div>
+   </div>
+  </div>
+  <div class="card space-y-2"><h3 class="text-xs font-bold uppercase border-b pb-1 text-slate-700">History Records</h3><div id="historyTable" class="overflow-x-auto"></div></div>
+ </section>
+ <section id="reports" class="page space-y-4">
+  <h1 class="text-xl font-extrabold text-slate-800">Executive Business Performance Report</h1>
+  <div class="card space-y-3">
+   <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+    <div><label class="text-xs font-bold text-slate-600 mb-1 block">From Date</label><input id="brFrom" type="date"></div>
+    <div><label class="text-xs font-bold text-slate-600 mb-1 block">To Date</label><input id="brTo" type="date"></div>
+   </div>
+   <div class="flex flex-wrap gap-2">
+    <button class="btn btn-blue" onclick="generateExecutiveReport()"><i class="fa-solid fa-chart-pie"></i> Generate Report</button>
+    <button class="btn btn-dark" onclick="downloadExecutivePDF()"><i class="fa-solid fa-file-pdf"></i> PDF Save</button>
+    <button class="btn btn-green" onclick="shareExecutiveWhatsApp()"><i class="fa-brands fa-whatsapp"></i> WhatsApp</button>
+   </div>
+  </div>
+  <div class="card space-y-2" id="executiveReportOutput"></div>
+ </section>
+ <section id="settings" class="page space-y-4">
+  <h1 class="text-xl font-extrabold text-slate-800">System Settings & Formatted Backup</h1>
+  <div class="card space-y-3">
+   <h3 class="text-xs font-bold uppercase border-b pb-1 text-slate-700">Shop Information</h3>
+   <div><label class="text-xs font-bold text-slate-600 mb-1 block">Shop Name</label><input id="cfgShop" value="AL SHOAIB TRADERS"></div>
+   <div><label class="text-xs font-bold text-slate-600 mb-1 block">Username (Login ke liye)</label><input id="cfgUser" value="Shoaib"></div>
+   <button class="btn btn-blue" onclick="saveConfig()">Save Settings</button>
+  </div>
+  <div class="card space-y-3">
+   <h3 class="text-xs font-bold uppercase border-b pb-1 text-slate-700"><i class="fa-solid fa-key"></i> Change Password</h3>
+   <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+    <div><label class="text-xs font-bold text-slate-600 mb-1 block">Purana Password</label><input id="cpOld" type="password" autocomplete="current-password" placeholder="Purana password"></div>
+    <div><label class="text-xs font-bold text-slate-600 mb-1 block">Naya Password</label><input id="cpNew" type="password" autocomplete="new-password" placeholder="Naya password"></div>
+    <div><label class="text-xs font-bold text-slate-600 mb-1 block">Naya Password Dobara</label><input id="cpNew2" type="password" autocomplete="new-password" placeholder="Confirm password"></div>
+   </div>
+   <button class="btn btn-dark" onclick="changePassword()"><i class="fa-solid fa-key"></i> Change Password</button>
+  </div>
+  <div class="card space-y-3">
+   <h3 class="text-xs font-bold uppercase border-b pb-1 text-slate-700">Executive Formatted PDF Backup</h3>
+   <button class="btn btn-green" onclick="downloadFormattedPDFBackup()"><i class="fa-solid fa-file-pdf"></i> Download Complete Formatted PDF Backup</button>
+  </div>
+ </section>
+</main>
+</div>
+<div id="lpMenu" class="hidden fixed inset-0 flex items-end sm:items-center justify-center p-4" style="z-index:60;background:rgba(15,23,42,.55)" onclick="if(event.target===this&&Date.now()-lpOpenedAt>400)closeLp()">
+ <div class="w-full max-w-xs bg-white rounded-2xl p-4 space-y-2 shadow-xl">
+  <p id="lpTitle" class="text-sm font-extrabold text-slate-800 text-center pb-2 border-b"></p>
+  <button class="btn btn-blue w-full justify-center py-3" onclick="lpEdit()"><i class="fa-solid fa-pen"></i> Edit</button>
+  <button class="btn btn-red w-full justify-center py-3" onclick="lpDelete()"><i class="fa-solid fa-trash"></i> Delete</button>
+  <button class="btn w-full justify-center py-2.5" style="background:#e2e8f0;color:#334155" onclick="closeLp()">Cancel</button>
+ </div>
+</div>
+<div id="editModal" class="hidden fixed inset-0 flex items-center justify-center p-4" style="z-index:70;background:rgba(15,23,42,.55)">
+ <div class="w-full max-w-md bg-white rounded-2xl p-4 space-y-3 shadow-xl" style="max-height:88vh;display:flex;flex-direction:column">
+  <h3 id="editTitle" class="text-sm font-extrabold text-slate-800 border-b pb-2"></h3>
+  <div id="editBody" class="space-y-3" style="overflow-y:auto"></div>
+  <div class="flex gap-2 pt-1">
+   <button class="btn btn-green flex-1 justify-center py-2.5" onclick="editSave()"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+   <button class="btn flex-1 justify-center py-2.5" style="background:#e2e8f0;color:#334155" onclick="closeEdit()">Cancel</button>
+  </div>
+ </div>
+</div>
+<script>
+const KEY = "kiryana_erp_v2026_final_app";
+let db = JSON.parse(localStorage.getItem(KEY)) || {
+ sales: [], purchases: [], wasooli: [], expenses: [], stock: [], customers: [], salesmen: [], items: {},
+ settings: { shopName: "AL SHOAIB TRADERS", username: "Shoaib" }
+};
+if(!db.customers) db.customers = [];
+if(!db.salesmen) db.salesmen = [];
+if(!db.items) db.items = {};
+if(!db.settings) db.settings = {};
+if(!db.counters) db.counters = { sale: 0, purchase: 0 };
+
+/* ===== Auto Invoice Numbers (sale: INV-001, purchase: PUR-001) ===== */
+function fmtInv(type, n) { return (type === "sale" ? "INV-" : "PUR-") + String(n).padStart(3, "0"); }
+function invList(type) { return type === "sale" ? db.sales : db.purchases; }
+function nextInvNo(type) {
+ const max = invList(type).reduce((a, x) => Math.max(a, Number(x.invNo) || 0), 0);
+ return Math.max(Number(db.counters[type]) || 0, max) + 1;
+}
+function migrateInvoices() {
+ ["sale", "purchase"].forEach(type => {
+  const list = invList(type);
+  list.filter(x => !x.invNo).sort((a, b) => a.id - b.id).forEach(x => {
+   const n = nextInvNo(type);
+   if(type === "purchase" && x.invoice) x.oldInvoice = x.invoice;
+   x.invNo = n; x.invoice = fmtInv(type, n);
+   db.counters[type] = n;
+  });
+  list.forEach(x => { if(!x.invoice) x.invoice = fmtInv(type, x.invNo); });
+ });
+}
+migrateInvoices();
+function refreshInvoiceFields() {
+ const s = document.getElementById("sInvoice"), p = document.getElementById("pInvoice");
+ if(s) s.value = fmtInv("sale", nextInvNo("sale"));
+ if(p) p.value = fmtInv("purchase", nextInvNo("purchase"));
+}
+function lastPurchaseInvoice(name) {
+ const k = itemKey(name); let best = null;
+ db.purchases.forEach(p => {
+  if(p.items.some(i => itemKey(i.name) === k) && (!best || p.date > best.date || (p.date === best.date && p.id > best.id))) best = p;
+ });
+ return best ? (best.invoice || "-") : "-";
+}
+if(!db.settings.shopName || db.settings.shopName === "Kiryana Store") db.settings.shopName = "AL SHOAIB TRADERS";
+if(!db.settings.username) db.settings.username = "Shoaib";
+function save() { localStorage.setItem(KEY, JSON.stringify(db)); }
+function today() { return new Date().toISOString().slice(0, 10); }
+function toggleSide() { document.getElementById("side").classList.toggle("-translate-x-full"); }
+function nav(p) {
+ document.querySelectorAll(".page").forEach(e => e.classList.remove("active"));
+ document.getElementById(p).classList.add("active");
+ document.querySelectorAll(".nav-btn").forEach(e => e.classList.remove("active"));
+ if(window.innerWidth < 1024) toggleSide();
+ if(p === "stock") renderCurrentStockList();
+ if(p === "salesman-master") renderSalesmanMasterList();
+ refreshDashboard();
+}
+const LOW_STOCK_LIMIT = 5;
+function renderCurrentStockList() {
+ const box = document.getElementById("currentStockList");
+ if(!box) return;
+ const items = Object.values(db.items);
+ if(!items.length) { box.innerHTML = "<p class='text-xs text-slate-400 py-3'>Abhi tak koi item Purchase mein save nahi hua.</p>"; return; }
+ box.innerHTML = `<table><thead><tr><th>Item</th><th>Unit</th><th>Current Stock</th><th>Sell Rate</th><th>Last Invoice</th></tr></thead><tbody>` +
+  items.sort((a, b) => a.name.localeCompare(b.name)).map(it => `<tr><td class='font-bold'>${esc(it.name)}</td><td>${esc(it.unit || "-")}</td><td class="${Number(it.stock) <= LOW_STOCK_LIMIT ? "text-red-600 font-extrabold" : "font-bold"}">${it.stock}</td><td>Rs. ${it.sellPrice || 0}</td><td class='font-bold text-blue-700'>${esc(lastPurchaseInvoice(it.name))}</td></tr>`).join("") +
+  `</tbody></table>`;
+}
+let cTopItems, cTopCustomers, cProfitTrend;
+window.onload = function() {
+ const ctx1 = document.getElementById('chartTopItems').getContext('2d');
+ cTopItems = new Chart(ctx1, { type: 'bar', data: { labels: [], datasets: [{ label: 'Sales Qty', data: [], backgroundColor: '#2563eb' }] } });
+ const ctx2 = document.getElementById('chartTopCustomers').getContext('2d');
+ cTopCustomers = new Chart(ctx2, { type: 'bar', data: { labels: [], datasets: [{ label: 'Purchases (Rs)', data: [], backgroundColor: '#16a34a' }] } });
+ const ctx3 = document.getElementById('chartProfitTrend').getContext('2d');
+ cProfitTrend = new Chart(ctx3, { type: 'line', data: { labels: [], datasets: [{ label: 'Net Profit', data: [], borderColor: '#059669', fill: false }] } });
+ const tDate = today();
+ ["wDate", "pDate", "rDate", "expDate", "expFrom", "expTo", "stkFrom", "stkTo", "hFrom", "hTo", "brFrom", "brTo", "repFrom", "repTo"].forEach(id => {
+  let el = document.getElementById(id);
+  if(el) el.value = tDate;
+ });
+ addSaleRow();
+ addPurchaseRow();
+ addWasooliRow();
+ save();
+ refreshInvoiceFields();
+ attachAutocomplete(document.getElementById("sCustomer"), () => db.customers, c => {
+  document.getElementById("sAddress").value = c.address || "";
+ }, name => !name || !!findCustomer(name));
+ attachAutocomplete(document.getElementById("ledgerCustomer"), () => db.customers);
+ attachAutocomplete(document.getElementById("sSalesman"), () => db.salesmen, () => {}, name => !name || !!findSalesman(name));
+ attachAutocomplete(document.getElementById("rSalesman"), () => db.salesmen);
+ attachAutocomplete(document.getElementById("rRoute"), uniqueCustomerAddresses);
+ attachAutocomplete(document.getElementById("wSalesman"), () => db.salesmen);
+ attachAutocomplete(document.getElementById("stkSearch"), () => Object.values(db.items));
+ attachAutocomplete(document.getElementById("repSalesman"), () => db.salesmen);
+ renderSalesmanMasterList();
+ renderCurrentStockList();
+ refreshDashboard();
+};
+function refreshDashboard() {
+ const tDate = today();
+ const todaySales = db.sales.filter(s => s.date === tDate);
+ const todayPurchases = db.purchases.filter(p => p.date === tDate);
+ const todayExpenses = db.expenses.filter(e => e.date === tDate);
+ const totalSaleAmt = todaySales.reduce((a, b) => a + (Number(b.total) || 0), 0);
+ const totalPurchaseAmt = todayPurchases.reduce((a, b) => a + (Number(b.total) || 0), 0);
+ const totalExpAmt = todayExpenses.reduce((a, b) => a + (Number(b.amount) || 0), 0);
+ document.getElementById("dSale").innerText = "Rs. " + totalSaleAmt;
+ document.getElementById("dPurchase").innerText = "Rs. " + totalPurchaseAmt;
+ document.getElementById("dExpense").innerText = "Rs. " + totalExpAmt;
+ document.getElementById("dProfit").innerText = "Rs. " + (totalSaleAmt - totalExpAmt);
+ const low = Object.values(db.items).filter(it => Number(it.stock) <= LOW_STOCK_LIMIT);
+ const lowBox = document.getElementById("lowStockList");
+ if(lowBox) lowBox.innerHTML = low.length ? low.map(it => `<div class="flex justify-between py-1 border-b border-slate-100 text-xs"><span class="font-bold">${esc(it.name)}</span><span class="text-red-600 font-extrabold">${it.stock} ${esc(it.unit || "")} bacha hai</span></div>`).join("") : "Koi item low stock par nahi hai.";
+ renderAIRecommendations();
+ if(db.sales.length === 0) {
+  cTopItems.data.labels = ['No Data']; cTopItems.data.datasets[0].data = [0]; cTopItems.update();
+  cTopCustomers.data.labels = ['No Data']; cTopCustomers.data.datasets[0].data = [0]; cTopCustomers.update();
+  cProfitTrend.data.labels = ['No Data']; cProfitTrend.data.datasets[0].data = [0]; cProfitTrend.update();
+ } else {
+  let itemMap = {};
+  let custMap = {};
+  db.sales.forEach(s => {
+   custMap[s.customer] = (custMap[s.customer] || 0) + Number(s.total);
+   s.items.forEach(i => {
+    itemMap[i.name] = (itemMap[i.name] || 0) + Number(i.qty);
+   });
+  });
+  cTopItems.data.labels = Object.keys(itemMap).slice(0, 5);
+  cTopItems.data.datasets[0].data = Object.values(itemMap).slice(0, 5);
+  cTopItems.update();
+  cTopCustomers.data.labels = Object.keys(custMap).slice(0, 5);
+  cTopCustomers.data.datasets[0].data = Object.values(custMap).slice(0, 5);
+  cTopCustomers.update();
+ }
+}
+
+function renderAIRecommendations() {
+ const box = document.getElementById("aiRecommendationsList");
+ if(!box) return;
+
+ let itemSalesCount = {};
+ let itemProfitMargin = {};
+
+ Object.values(db.items).forEach(it => {
+  const buy = Number(it.buyPrice) || 0;
+  const sell = Number(it.sellPrice) || 0;
+  itemProfitMargin[it.name] = {
+   margin: sell - buy,
+   buyPrice: buy,
+   sellPrice: sell,
+   stock: Number(it.stock) || 0
+  };
+ });
+
+ db.sales.forEach(s => {
+  s.items.forEach(i => {
+   itemSalesCount[i.name] = (itemSalesCount[i.name] || 0) + Number(i.qty || 0);
+  });
+ });
+
+ let recommendations = [];
+ Object.keys(itemProfitMargin).forEach(name => {
+  const soldQty = itemSalesCount[name] || 0;
+  const info = itemProfitMargin[name];
+  const profit = info.margin;
+
+  if(soldQty >= 3 || profit >= 50) {
+   let reason = "";
+   if(soldQty >= 3 && profit >= 50) {
+     reason = `Yeh item market mein bohat tezi se bik raha hai (${soldQty} units sold) aur is par profit bhi zyada (Rs. ${profit} per unit) hai.`;
+   } else if(soldQty >= 3) {
+     reason = `Is item ki demand bohat zyada hai, ab tak ${soldQty} units sell ho chuke hain.`;
+   } else {
+     reason = `Is item par profit margin kafi acha hai (Rs. ${profit} per unit), stock mein zaroor rakhein.`;
+   }
+
+   recommendations.push({
+    name: name,
+    stock: info.stock,
+    sold: soldQty,
+    profit: profit,
+    reason: reason
+   });
+  }
+ });
+
+ if(!recommendations.length) {
+  box.innerHTML = "Filhal sales data ke mutabiq koi specific recommendation nahi hai. Mazeed sales enter karein.";
+  return;
+ }
+
+ box.innerHTML = recommendations.map(rec => `
+  <div class="p-2.5 bg-blue-50 border border-blue-200 rounded-lg space-y-1 mb-2">
+   <div class="flex justify-between items-center">
+    <span class="font-extrabold text-slate-900">${esc(rec.name)}</span>
+    <span class="text-[11px] font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">Stock: ${rec.stock}</span>
+   </div>
+   <p class="text-slate-700 font-medium"><b>Kyun kharidein:</b> ${esc(rec.reason)}</p>
+  </div>
+ `).join("");
+}
+
+function addSaleRow() {
+ document.getElementById("saleRows").insertAdjacentHTML('beforeend', `
+  <div class="s-row">
+   <div class="grid grid-cols-4 gap-2 items-center">
+    <div class="ac-wrap"><input placeholder="Item Name (saved item)" class="s-name" autocomplete="off"><div class="ac-box"></div></div>
+    <input type="number" placeholder="Qty" value="1" class="s-qty" oninput="calcSaleTotal()">
+    <input type="number" placeholder="Price" value="0" class="s-price" oninput="calcSaleTotal()">
+    <button class="btn btn-red py-1 px-2 text-xs justify-center" onclick="this.closest('.s-row').remove();calcSaleTotal();">×</button>
+   </div>
+   <p class="f-err-msg">Yeh item system mein save nahi hai. Pehle "New Purchase" mein item add karein.</p>
+  </div>
+ `);
+ const row = document.getElementById("saleRows").lastElementChild;
+ const nameInput = row.querySelector(".s-name");
+ attachAutocomplete(nameInput, () => Object.values(db.items), it => {
+  row.querySelector(".s-price").value = it.sellPrice || 0;
+  calcSaleTotal();
+ }, name => !!findItem(name));
+}
+function calcSaleTotal() {
+ let total = 0;
+ document.querySelectorAll(".s-row").forEach(r => {
+  let q = Number(r.querySelector(".s-qty").value) || 0;
+  let p = Number(r.querySelector(".s-price").value) || 0;
+  total += (q * p);
+ });
+ let paid = Number(document.getElementById("sPaid").value) || 0;
+ document.getElementById("sTotal").innerText = "Rs. " + total;
+ document.getElementById("sBalance").innerText = "Rs. " + Math.max(0, total - paid);
+}
+const UNIT_OPTIONS = ["Piece", "Kg", "Gram", "Litre", "ML", "Carton", "Dozen", "Bag", "Box", "Other"];
+function addPurchaseRow() {
+ document.getElementById("purchaseRows").insertAdjacentHTML('beforeend', `
+  <div class="p-row space-y-2 pb-2 border-b border-slate-200 last:border-0">
+   <div class="grid grid-cols-1 sm:grid-cols-5 gap-2 items-center">
+    <div class="ac-wrap sm:col-span-2"><input placeholder="Item Name" class="p-name" autocomplete="off"><div class="ac-box"></div></div>
+    <select class="p-unit" onchange="if(this.value==='Other'){const u=prompt('Custom unit likhein (e.g. Tin, Roll):');if(u&&u.trim()){const o=document.createElement('option');o.value=u.trim();o.text=u.trim();o.selected=true;this.insertBefore(o,this.lastElementChild);}else{this.value='Piece';}}">${UNIT_OPTIONS.map(u => `<option value="${u}">${u}</option>`).join("")}</select>
+    <input type="number" placeholder="Qty" value="1" class="p-qty" oninput="calcPurchaseTotal()">
+    <button class="btn btn-red py-1 px-2 text-xs justify-center" onclick="this.closest('.p-row').remove();calcPurchaseTotal();">×</button>
+   </div>
+   <div class="grid grid-cols-2 gap-2">
+    <div><label class="text-[11px] font-bold text-slate-500 mb-0.5 block">Buy Price (per unit)</label><input type="number" placeholder="Buy Price" value="0" class="p-price" style="background:#fffbeb" oninput="calcPurchaseTotal()"></div>
+    <div><label class="text-[11px] font-bold text-slate-500 mb-0.5 block">Sell Rate (bill ke liye)</label><input type="number" placeholder="Sell Rate" value="0" class="p-sell" style="background:#f0fdf4"></div>
+   </div>
+  </div>
+ `);
+ const row = document.getElementById("purchaseRows").lastElementChild;
+ const nameInput = row.querySelector(".p-name");
+ attachAutocomplete(nameInput, () => Object.values(db.items), it => {
+  const unitSel = row.querySelector(".p-unit");
+  if(it.unit && ![...unitSel.options].some(o => o.value === it.unit)) {
+   const o = document.createElement("option"); o.value = it.unit; o.text = it.unit; unitSel.insertBefore(o, unitSel.lastElementChild);
+  }
+  unitSel.value = it.unit || "Piece";
+  row.querySelector(".p-price").value = it.buyPrice || 0;
+  row.querySelector(".p-sell").value = it.sellPrice || 0;
+ }, () => true);
+}
+function calcPurchaseTotal() {
+ let total = 0;
+ document.querySelectorAll(".p-row").forEach(r => {
+  let q = Number(r.querySelector(".p-qty").value) || 0;
+  let p = Number(r.querySelector(".p-price").value) || 0;
+  total += (q * p);
+ });
+ document.getElementById("pTotal").innerText = "Rs. " + total;
+}
+function addWasooliRow() {
+ document.getElementById("wasooliRows").insertAdjacentHTML('beforeend', `
+  <div class="grid grid-cols-3 gap-2 items-center w-row">
+   <div class="ac-wrap"><input placeholder="Customer Name" class="w-cust" autocomplete="off"><div class="ac-box"></div></div>
+   <input type="number" placeholder="Wasooli Amount" value="0" class="w-amt" oninput="calcWasooliTotal()">
+   <button class="btn btn-red py-1 px-2 text-xs justify-center" onclick="this.closest('.w-row').remove();calcWasooliTotal();">×</button>
+  </div>
+ `);
+ const row = document.getElementById("wasooliRows").lastElementChild;
+ attachAutocomplete(row.querySelector(".w-cust"), () => db.customers);
+}
+function calcWasooliTotal() {
+ let total = 0;
+ document.querySelectorAll(".w-row").forEach(r => {
+  total += (Number(r.querySelector(".w-amt").value) || 0);
+ });
+ document.getElementById("wTotal").innerText = "Rs. " + total;
+}
+let lastSale = null;
+function getSaleForm() {
+ const customer = document.getElementById("sCustomer").value.trim() || "Walk-in";
+ const address = document.getElementById("sAddress").value.trim();
+ const salesman = document.getElementById("sSalesman").value.trim();
+ const paid = Number(document.getElementById("sPaid").value) || 0;
+ const addPrevNote = document.getElementById("chkPrevBalance").checked;
+ let items = [];
+ let total = 0;
+ document.querySelectorAll(".s-row").forEach(r => {
+  let name = r.querySelector(".s-name").value.trim();
+  let qty = Number(r.querySelector(".s-qty").value) || 0;
+  let price = Number(r.querySelector(".s-price").value) || 0;
+  if(name && qty > 0) {
+   items.push({ name, qty, price, total: qty * price });
+   total += (qty * price);
+  }
+ });
+ if(items.length === 0) return null;
+ const invNo = nextInvNo("sale");
+ return { id: Date.now(), invNo, invoice: fmtInv("sale", invNo), date: today(), customer, address, salesman, items, total, paid, balance: total - paid, addPrevNote };
+}
+function validateSaleMasterData(s) {
+ const errors = [];
+ if(s.customer && s.customer !== "Walk-in" && !findCustomer(s.customer)) errors.push(`Customer "${s.customer}" system mein save nahi hai. Pehle "Add New Customer" se save karein.`);
+ if(s.salesman && !findSalesman(s.salesman)) errors.push(`Salesman "${s.salesman}" system mein save nahi hai. Pehle "Add New Salesman" se save karein.`);
+ s.items.forEach(i => { if(!findItem(i.name)) errors.push(`Item "${i.name}" system mein save nahi hai. Pehle "New Purchase" mein add karein.`); });
+ return errors;
+}
+function saveSale() {
+ const saleObj = getSaleForm();
+ if(!saleObj) return alert("Pehle items enter karein!");
+ const errors = validateSaleMasterData(saleObj);
+ markSaleFieldErrors(saleObj);
+ if(errors.length) return alert(errors.join("\n"));
+ db.sales.push(saleObj);
+ db.counters.sale = saleObj.invNo;
+ adjustStockForSaleItems(saleObj.items, -1);
+ lastSale = saleObj;
+ save();
+ alert("Sale Invoice " + saleObj.invoice + " Saved Successfully!");
+ document.getElementById("saleRows").innerHTML = "";
+ addSaleRow();
+ document.getElementById("sCustomer").value = "";
+ document.getElementById("sAddress").value = "";
+ document.getElementById("sSalesman").value = "";
+ document.getElementById("sPaid").value = 0;
+ calcSaleTotal();
+ refreshInvoiceFields();
+ refreshDashboard();
+}
+function markSaleFieldErrors(s) {
+ toggleFieldError(document.getElementById("sCustomer"), document.getElementById("sCustomerErr"), s.customer !== "Walk-in" && !findCustomer(s.customer));
+ toggleFieldError(document.getElementById("sSalesman"), document.getElementById("sSalesmanErr"), !!s.salesman && !findSalesman(s.salesman));
+ document.querySelectorAll(".s-row").forEach(r => {
+  const name = r.querySelector(".s-name").value.trim();
+  toggleFieldError(r.querySelector(".s-name"), r.querySelector(".f-err-msg"), !!name && !findItem(name));
+ });
+}
+function toggleFieldError(input, msgEl, isError) {
+ if(!input) return;
+ input.classList.toggle("f-err", !!isError);
+ if(msgEl) msgEl.classList.toggle("show", !!isError);
+}
+function customerPreviousBalance(customerName, excludeId) {
+ return db.sales.filter(s => s.customer.toLowerCase() === String(customerName || "").trim().toLowerCase() && s.id !== excludeId)
+  .reduce((a, b) => a + (Number(b.balance) || 0), 0);
+}
+function buildSaleInvoicePDF(s) {
+ if(!window.jspdf) { alert("PDF library load nahi hui. Internet check karein aur dobara try karein."); return null; }
+ const cust = findCustomer(s.customer);
+ const doc = new window.jspdf.jsPDF();
+ doc.setFillColor(15, 23, 42); doc.rect(0, 0, 210, 26, "F");
+ doc.setTextColor(255, 255, 255); doc.setFontSize(18); doc.setFont(undefined, "bold");
+ doc.text(db.settings.shopName, 14, 14);
+ doc.setFontSize(10); doc.setFont(undefined, "normal");
+ doc.text("Sale Invoice", 14, 21);
+ doc.setTextColor(255, 255, 255); doc.setFontSize(9);
+ doc.text("Invoice #: " + (s.invoice || s.id), 196, 12, { align: "right" });
+ doc.text("Date: " + s.date, 196, 18, { align: "right" });
+ doc.setTextColor(15, 23, 42);
+ let y = 34;
+ doc.setFontSize(10); doc.setFont(undefined, "bold");
+ doc.text("Bill To:", 14, y);
+ doc.setFont(undefined, "normal");
+ doc.text(s.customer, 30, y);
+ y += 5;
+ const addr = s.address || (cust ? cust.address : "");
+ if(addr) { doc.text("Address: " + addr, 14, y); y += 5; }
+ const custPhone = cust && cust.phone ? cust.phone : "";
+ if(custPhone) { doc.text("Mobile: " + custPhone, 14, y); y += 5; }
+ if(s.salesman) { doc.text("Salesman: " + s.salesman, 14, y); y += 5; }
+ y += 2;
+ doc.autoTable({
+  startY: y,
+  head: [["Item", "Qty", "Unit", "Price", "Total"]],
+  body: s.items.map(i => { const it = findItem(i.name); return [i.name, i.qty, it ? it.unit || "-" : "-", "Rs. " + i.price, "Rs. " + i.total]; }),
+  headStyles: { fillColor: [15, 23, 42] },
+  styles: { fontSize: 9 }
+ });
+ let fy = doc.lastAutoTable.finalY + 8;
+ doc.setFontSize(10);
+ doc.text("Grand Total:", 140, fy); doc.setFont(undefined, "bold"); doc.text("Rs. " + s.total, 196, fy, { align: "right" }); doc.setFont(undefined, "normal");
+ fy += 6;
+ doc.text("Paid:", 140, fy); doc.text("Rs. " + s.paid, 196, fy, { align: "right" });
+ fy += 6;
+ doc.setTextColor(220, 38, 38);
+ doc.text("Balance:", 140, fy); doc.setFont(undefined, "bold"); doc.text("Rs. " + s.balance, 196, fy, { align: "right" }); doc.setFont(undefined, "normal");
+ doc.setTextColor(15, 23, 42);
+ if(s.addPrevNote) {
+  const prevBal = customerPreviousBalance(s.customer, s.id);
+  fy += 9;
+  doc.setFillColor(255, 251, 235); doc.rect(14, fy - 5, 182, 14, "F");
+  doc.setFontSize(9);
+  doc.text("Previous Outstanding Balance (is invoice se pehle): Rs. " + prevBal, 18, fy);
+  doc.setFont(undefined, "bold");
+  doc.text("Total Payable Now: Rs. " + (prevBal + s.balance), 18, fy + 6);
+  doc.setFont(undefined, "normal");
+  fy += 14;
+ }
+ doc.setFontSize(9); doc.setTextColor(100, 116, 139);
+ doc.text("Shukriya! Dobara khidmat ka mauqa dein.", 14, fy + 10);
+ return doc;
+}
+function saleInvoiceFilename(s) { return "invoice_" + (s.invoice ? s.invoice + "_" : "") + s.customer.replace(/\s+/g, "_") + "_" + s.date + ".pdf"; }
+function downloadSaleInvoicePDF() {
+ const s = getSaleForm() || lastSale;
+ if(!s) return alert("Pehle items enter karein!");
+ const errors = validateSaleMasterData(s);
+ markSaleFieldErrors(s);
+ if(errors.length) return alert(errors.join("\n"));
+ const doc = buildSaleInvoicePDF(s);
+ if(doc) doc.save(saleInvoiceFilename(s));
+}
+async function shareSaleWhatsApp() {
+ const s = getSaleForm() || lastSale;
+ if(!s) return alert("Pehle items enter karein!");
+ const errors = validateSaleMasterData(s);
+ markSaleFieldErrors(s);
+ if(errors.length) return alert(errors.join("\n"));
+ const doc = buildSaleInvoicePDF(s);
+ if(!doc) return;
+ const filename = saleInvoiceFilename(s);
+ const blob = doc.output("blob");
+ try {
+  const file = new File([blob], filename, { type: "application/pdf" });
+  if(navigator.canShare && navigator.canShare({ files: [file] })) {
+   await navigator.share({ files: [file], title: db.settings.shopName + " Invoice", text: "Invoice - " + s.customer });
+   return;
+  }
+ } catch(e) { /* fall through to download + whatsapp text */ }
+ doc.save(filename);
+ const cust = findCustomer(s.customer);
+ const phone = cust && cust.phone ? cust.phone.replace(/\D/g, "") : "";
+ openWhatsApp(`*${db.settings.shopName}*\nInvoice ${s.invoice || ""} PDF download ho gaya hai (${filename}). WhatsApp mein attach karke ${s.customer} ko bhej dein.`, phone);
+}
+function savePurchase() {
+ const company = document.getElementById("pCompany").value.trim();
+ const date = document.getElementById("pDate").value;
+ let items = [];
+ let total = 0;
+ document.querySelectorAll(".p-row").forEach(r => {
+  let name = r.querySelector(".p-name").value.trim();
+  let unit = r.querySelector(".p-unit").value;
+  let qty = Number(r.querySelector(".p-qty").value) || 0;
+  let price = Number(r.querySelector(".p-price").value) || 0;
+  let sell = Number(r.querySelector(".p-sell").value) || 0;
+  if(name && qty > 0) {
+   items.push({ name, unit, qty, price, sell, total: qty * price });
+   total += (qty * price);
+  }
+ });
+ if(!company || items.length === 0) return alert("Company Name aur Items enter karein!");
+ const invNo = nextInvNo("purchase"), invoice = fmtInv("purchase", invNo);
+ db.purchases.push({ id: Date.now(), invNo, invoice, date, company, items, total });
+ db.counters.purchase = invNo;
+ items.forEach(it => upsertItemFromPurchase(it));
+ save();
+ alert("Stock Purchase Entry Saved! Invoice: " + invoice);
+ document.getElementById("purchaseRows").innerHTML = "";
+ addPurchaseRow();
+ calcPurchaseTotal();
+ refreshInvoiceFields();
+ refreshDashboard();
+}
+function itemKey(name) { return String(name || "").trim().toLowerCase(); }
+function findItem(name) { return db.items[itemKey(name)]; }
+function findCustomer(name) { return db.customers.find(c => c.name.toLowerCase() === String(name || "").trim().toLowerCase()); }
+function findSalesman(name) { return db.salesmen.find(s => s.name.toLowerCase() === String(name || "").trim().toLowerCase()); }
+function uniqueCustomerAddresses() {
+ const seen = {}; const out = [];
+ db.customers.forEach(c => { const a = (c.address || "").trim(); if(a && !seen[a.toLowerCase()]) { seen[a.toLowerCase()] = 1; out.push({ name: a }); } });
+ return out;
+}
+function upsertItemFromPurchase(it) {
+ const key = itemKey(it.name);
+ if(!key) return;
+ const existing = db.items[key];
+ db.items[key] = {
+  name: existing ? existing.name : it.name,
+  unit: it.unit || (existing ? existing.unit : "Piece"),
+  buyPrice: it.price,
+  sellPrice: it.sell > 0 ? it.sell : (existing ? existing.sellPrice : it.price),
+  stock: (existing ? Number(existing.stock) || 0 : 0) + Number(it.qty || 0)
+ };
+}
+function adjustStockForSaleItems(items, sign) {
+ items.forEach(i => {
+  const key = itemKey(i.name);
+  const it = db.items[key];
+  if(it) it.stock = (Number(it.stock) || 0) + sign * Number(i.qty || 0);
+ });
+}
+
+function attachAutocomplete(input, listFn, onPick, existsFn) {
+ const wrap = input.closest(".ac-wrap") || input.parentElement;
+ let box = wrap.querySelector(".ac-box");
+ if(!box) { box = document.createElement("div"); box.className = "ac-box"; wrap.appendChild(box); }
+ const errContainer = wrap.closest(".s-row") || wrap;
+ const errMsg = errContainer.querySelector(".f-err-msg");
+ function render(q) {
+  const list = listFn();
+  const matches = q ? list.filter(x => x.name.toLowerCase().includes(q)).slice(0, 6) : [];
+  if(!matches.length) { box.classList.remove("show"); box.innerHTML = ""; return; }
+  box.innerHTML = matches.map(m => `<div class="ac-item" data-n="${esc(m.name)}">${esc(m.name)}${m.address || m.phone ? `<small>${esc(m.address || m.phone || "")}</small>` : ""}</div>`).join("");
+  box.classList.add("show");
+  box.querySelectorAll(".ac-item").forEach(el => {
+   el.addEventListener("mousedown", ev => {
+    ev.preventDefault();
+    const name = el.dataset.n;
+    input.value = name;
+    box.classList.remove("show");
+    const found = listFn().find(x => x.name === name);
+    if(found && onPick) onPick(found);
+    toggleFieldError(input, errMsg, false);
+   });
+  });
+ }
+ input.addEventListener("input", () => {
+  const q = input.value.trim().toLowerCase();
+  render(q);
+  toggleFieldError(input, errMsg, false);
+ });
+ input.addEventListener("focus", () => render(input.value.trim().toLowerCase()));
+ input.addEventListener("blur", () => {
+  setTimeout(() => {
+   box.classList.remove("show");
+   if(existsFn) { const v = input.value.trim(); toggleFieldError(input, errMsg, !!v && !existsFn(input.value)); }
+  }, 150);
+ });
+}
+
+let currentLedgerCustomer = "";
+function generateCustomerLedger() {
+ const name = document.getElementById("ledgerCustomer").value.trim();
+ const box = document.getElementById("ledgerOutputBox");
+ if(!name) { alert("Customer ka naam enter karein!"); return; }
+ currentLedgerCustomer = name;
+ const cust = findCustomer(name);
+ const sales = db.sales.filter(s => s.customer.toLowerCase() === name.toLowerCase()).sort((a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : a.id - b.id);
+ 
+ if(!sales.length) {
+  box.innerHTML = `<p class='text-xs text-slate-400 py-3 text-center'>Customer "${esc(name)}" ki koi sales history nahi mili.</p>`;
+  return;
+ }
+ 
+ let totalSalesAmt = 0;
+ let totalPaidAmt = 0;
+ let totalBalanceAmt = 0;
+
+ let rowsHtml = sales.map(s => {
+  totalSalesAmt += Number(s.total) || 0;
+  totalPaidAmt += Number(s.paid) || 0;
+  totalBalanceAmt += Number(s.balance) || 0;
+  const itemsStr = s.items.map(i => `${i.name} (${i.qty} x ${i.price})`).join(", ");
+  return `<tr data-lp="sale" data-id="${s.id}">
+   <td>${s.date}</td>
+   <td class='font-bold text-blue-700'>${esc(s.invoice || '-')}</td>
+   <td>${esc(itemsStr)}</td>
+   <td class='font-bold'>Rs. ${s.total}</td>
+   <td class='text-emerald-600 font-bold'>Rs. ${s.paid}</td>
+   <td class='text-red-600 font-bold'>Rs. ${s.balance}</td>
+  </tr>`;
+ }).join("");
+
+ box.innerHTML = `
+  <div class="flex justify-between items-center border-b pb-2 flex-wrap gap-2">
+   <div>
+    <h3 class="text-sm font-bold text-slate-800">Account Statement: <span class="text-blue-600">${esc(name)}</span></h3>
+    <p class="text-xs text-slate-500">Address: ${esc(cust && cust.address ? cust.address : "N/A")} | Mobile: ${esc(cust && cust.phone ? cust.phone : "N/A")}</p>
+   </div>
+   <div class="flex gap-2">
+    <button class="btn btn-dark text-xs py-1.5" onclick="downloadLedgerPDF()"><i class="fa-solid fa-file-pdf"></i> PDF Statement</button>
+    <button class="btn btn-green text-xs py-1.5" onclick="shareLedgerWhatsApp()"><i class="fa-brands fa-whatsapp"></i> WhatsApp</button>
+   </div>
+  </div>
+  <div class="overflow-x-auto">
+   ${LP_TIP}
+   <table>
+    <thead><tr><th>Date</th><th>Invoice</th><th>Items Details</th><th>Total</th><th>Paid</th><th>Balance</th></tr></thead>
+    <tbody>
+     ${rowsHtml}
+     <tr class="bg-slate-50 font-extrabold">
+      <td colspan="3" class="text-right">Total Summary:</td>
+      <td>Rs. ${totalSalesAmt}</td>
+      <td class="text-emerald-600">Rs. ${totalPaidAmt}</td>
+      <td class="text-red-600">Rs. ${totalBalanceAmt}</td>
+     </tr>
+    </tbody>
+   </table>
+  </div>
+ `;
+}
+
+function buildLedgerPDF(name) {
+ if(!window.jspdf) return alert("PDF library load nahi hui!");
+ const cust = findCustomer(name);
+ const sales = db.sales.filter(s => s.customer.toLowerCase() === name.toLowerCase()).sort((a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : a.id - b.id);
+ if(!sales.length) return null;
+
+ const doc = new window.jspdf.jsPDF();
+ doc.setFillColor(15, 23, 42); doc.rect(0, 0, 210, 26, "F");
+ doc.setTextColor(255, 255, 255); doc.setFontSize(16); doc.setFont(undefined, "bold");
+ doc.text(db.settings.shopName, 14, 14);
+ doc.setFontSize(10); doc.setFont(undefined, "normal");
+ doc.text("Customer Account Statement (Ledger)", 14, 21);
+
+ doc.setTextColor(15, 23, 42);
+ let y = 34;
+ doc.setFontSize(11); doc.setFont(undefined, "bold");
+ doc.text("Customer Name: " + name, 14, y);
+ y += 5;
+ doc.setFontSize(9); doc.setFont(undefined, "normal");
+ if(cust && cust.address) { doc.text("Address: " + cust.address, 14, y); y += 5; }
+ if(cust && cust.phone) { doc.text("Mobile: " + cust.phone, 14, y); y += 5; }
+ y += 2;
+
+ let totSales = 0, totPaid = 0, totBal = 0;
+ const bodyData = sales.map(s => {
+  totSales += Number(s.total) || 0;
+  totPaid += Number(s.paid) || 0;
+  totBal += Number(s.balance) || 0;
+  const itemsStr = s.items.map(i => `${i.name} (${i.qty})`).join(", ");
+  return [s.date, s.invoice || "-", itemsStr, "Rs. " + s.total, "Rs. " + s.paid, "Rs. " + s.balance];
+ });
+
+ doc.autoTable({
+  startY: y,
+  head: [["Date", "Invoice", "Items", "Total", "Paid", "Balance"]],
+  body: bodyData,
+  headStyles: { fillColor: [15, 23, 42] },
+  styles: { fontSize: 8.5 }
+ });
+
+ let fy = doc.lastAutoTable.finalY + 8;
+ doc.setFontSize(10); doc.setFont(undefined, "bold");
+ doc.text(`Total Sales: Rs. ${totSales}   |   Total Paid: Rs. ${totPaid}   |   Net Balance Due: Rs. ${totBal}`, 14, fy);
+ return doc;
+}
+
+function downloadLedgerPDF() {
+ if(!currentLedgerCustomer) return alert("Pehle customer select karein!");
+ const doc = buildLedgerPDF(currentLedgerCustomer);
+ if(doc) doc.save("ledger_" + currentLedgerCustomer.replace(/\s+/g, "_") + ".pdf");
+}
+
+function shareLedgerWhatsApp() {
+ if(!currentLedgerCustomer) return alert("Pehle customer select karein!");
+ const sales = db.sales.filter(s => s.customer.toLowerCase() === currentLedgerCustomer.toLowerCase());
+ if(!sales.length) return;
+ let totSales = 0, totBal = 0;
+ sales.forEach(s => { totSales += s.total; totBal += s.balance; });
+ const cust = findCustomer(currentLedgerCustomer);
+ const phone = cust && cust.phone ? cust.phone : "";
+ 
+ let msg = `*${db.settings.shopName}*\n*Account Statement - ${currentLedgerCustomer}*\n\n`;
+ sales.forEach(s => {
+  msg += `${s.date} [${s.invoice || '-'}]: Total Rs.${s.total} | Paid Rs.${s.paid} | Bal Rs.${s.balance}\n`;
+ });
+ msg += `\n*Total Bill:* Rs.${totSales}\n*Total Remaining Balance:* Rs.${totBal}\n\nShukriya!`;
+ openWhatsApp(msg, phone);
+}
+
+function openAddCustomerModal() {
+ openEdit("Naya Customer Save Karein", [
+  { label: "Customer Name", inputs: [{ id: "cname", type: "text", ph: "Customer Name", value: "" }] },
+  { label: "Address / Area", inputs: [{ id: "caddr", type: "text", ph: "Address / Area", value: "" }] },
+  { label: "Mobile Number", inputs: [{ id: "cphone", type: "text", ph: "03xx-xxxxxxx", value: "" }] }
+ ], v => {
+  const name = v("cname").trim();
+  if(!name) { alert("Customer ka naam likhein!"); return false; }
+  saveCustomerMaster(name, v("caddr").trim(), v("cphone").trim());
+  document.getElementById("sCustomer").value = name;
+  document.getElementById("sAddress").value = v("caddr").trim();
+  toggleFieldError(document.getElementById("sCustomer"), document.getElementById("sCustomerErr"), false);
+ });
+}
+function openAddSalesmanModal() {
+ openEdit("Naya Salesman Save Karein", [
+  { label: "Salesman Name", inputs: [{ id: "smname", type: "text", ph: "Salesman Name", value: "" }] },
+  { label: "Mobile Number", inputs: [{ id: "smphone", type: "text", ph: "03xx-xxxxxxx", value: "" }] }
+ ], v => {
+  const name = v("smname").trim();
+  if(!name) { alert("Salesman ka naam likhein!"); return false; }
+  saveSalesmanMaster(name, v("smphone").trim());
+  document.getElementById("sSalesman").value = name;
+  toggleFieldError(document.getElementById("sSalesman"), document.getElementById("sSalesmanErr"), false);
+ });
+}
+function saveCustomerMaster(name, address, phone) {
+ const existing = findCustomer(name);
+ if(existing) { existing.name = name; existing.address = address; existing.phone = phone; }
+ else db.customers.push({ id: Date.now(), name, address, phone });
+ save();
+}
+function saveSalesmanMaster(name, phone) {
+ const existing = findSalesman(name);
+ if(existing) { existing.name = name; existing.phone = phone; }
+ else db.salesmen.push({ id: Date.now(), name, phone });
+ save();
+}
+function addSalesmanMaster() {
+ const name = document.getElementById("smName").value.trim();
+ const phone = document.getElementById("smPhone").value.trim();
+ if(!name) return alert("Salesman ka naam likhein!");
+ saveSalesmanMaster(name, phone);
+ document.getElementById("smName").value = "";
+ document.getElementById("smPhone").value = "";
+ renderSalesmanMasterList();
+ alert("Salesman Saved Successfully!");
+}
+function renderSalesmanMasterList() {
+ const box = document.getElementById("salesmanMasterList");
+ if(!box) return;
+ if(!db.salesmen.length) { box.innerHTML = "<p class='text-xs text-slate-400 py-3'>Abhi tak koi salesman save nahi hua.</p>"; return; }
+ box.innerHTML = LP_TIP + `<table><thead><tr><th>Name</th><th>Mobile</th></tr></thead><tbody>` +
+  db.salesmen.map(s => `<tr data-lp="salesman" data-id="${s.id}"><td class='font-bold'>${esc(s.name)}</td><td>${esc(s.phone || "-")}</td></tr>`).join("") +
+  `</tbody></table>`;
+}
+let lastWasooli = null;
+function getWasooliForm() {
+ const date = document.getElementById("wDate").value;
+ const salesman = document.getElementById("wSalesman").value.trim();
+ let list = [];
+ document.querySelectorAll(".w-row").forEach(r => {
+  let customer = r.querySelector(".w-cust").value.trim();
+  let amount = Number(r.querySelector(".w-amt").value) || 0;
+  if(customer && amount > 0) list.push({ customer, amount });
+ });
+ if(list.length === 0) return null;
+ return { id: Date.now(), date, salesman, list };
+}
+function saveBulkWasooli() {
+ const w = getWasooliForm();
+ if(!w) return alert("Wasooli entries daalein!");
+ db.wasooli.push(w);
+ lastWasooli = w;
+ save();
+ alert("Bulk Wasooli Sheet Saved!");
+ document.getElementById("wasooliRows").innerHTML = "";
+ addWasooliRow();
+ calcWasooliTotal();
+ refreshDashboard();
+}
+function wasooliTotal(w) { return w.list.reduce((a, b) => a + b.amount, 0); }
+function downloadWasooliPDF() {
+ const w = getWasooliForm() || lastWasooli;
+ if(!w) return alert("Wasooli entries daalein!");
+ makePDF("Route Wasooli Sheet", `Date: ${w.date}   Salesman: ${w.salesman || "-"}`,
+  ["#", "Customer", "Wasooli (Rs)"], w.list.map((x, i) => [i + 1, x.customer, x.amount]),
+  ["Total Wasooli: Rs. " + wasooliTotal(w)], "wasooli_" + w.date + ".pdf");
+}
+function shareWasooliWhatsApp() {
+ const w = getWasooliForm() || lastWasooli;
+ if(!w) return alert("Wasooli entries daalein!");
+ let t = `*${db.settings.shopName} - Wasooli Sheet*\nDate: ${w.date}\nSalesman: ${w.salesman || "-"}\n\n`;
+ w.list.forEach(x => { t += `${x.customer}: Rs. ${x.amount}\n`; });
+ t += `\nTotal Wasooli: Rs. ${wasooliTotal(w)}`;
+ openWhatsApp(t);
+}
+function addExpense() {
+ const title = document.getElementById("expTitle").value.trim();
+ const amount = Number(document.getElementById("expAmount").value) || 0;
+ const date = document.getElementById("expDate").value;
+ const note = document.getElementById("expNote").value.trim();
+ if(!title || amount <= 0) return alert("Expense Title aur Amount sahi enter karein!");
+ db.expenses.push({ id: Date.now(), title, amount, date, note });
+ save();
+ document.getElementById("expTitle").value = "";
+ document.getElementById("expAmount").value = "";
+ document.getElementById("expNote").value = "";
+ if(expSearched) searchExpenses(true);
+ refreshDashboard();
+ alert("Expense Saved Successfully!");
+}
+let expResults = [], expRange = "", expSearched = false;
+function searchExpenses(silent) {
+ const from = document.getElementById("expFrom").value;
+ const to = document.getElementById("expTo").value;
+ if(!from || !to) return silent ? null : alert("From aur To dono date select karein!");
+ if(from > to) return silent ? null : alert("From date, To date se pehle honi chahiye!");
+ expResults = db.expenses.filter(e => e.date >= from && e.date <= to)
+  .sort((a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : a.id - b.id);
+ expRange = from + " to " + to;
+ expSearched = true;
+ renderExpenseResults();
+}
+function expTotal() { return expResults.reduce((a, b) => a + (Number(b.amount) || 0), 0); }
+function renderExpenseResults() {
+ const box = document.getElementById("expenseTable");
+ const actions = document.getElementById("expActions");
+ if(expResults.length === 0) {
+  box.innerHTML = "<p class='text-xs text-slate-400 py-3'>Is tareekh me koi expense nahi mila.</p>";
+  actions.classList.add("hidden");
+  return;
+ }
+ box.innerHTML = LP_TIP + `<table><thead><tr><th>Date</th><th>Title</th><th>Note / Details</th><th>Amount</th></tr></thead><tbody>` +
+  expResults.map(e => `
+   <tr data-lp="expense" data-id="${e.id}">
+    <td>${e.date}</td>
+    <td class='font-bold'>${e.title}</td>
+    <td class='text-slate-600'>${e.note || '-'}</td>
+    <td class='text-red-600 font-bold'>Rs. ${e.amount}</td>
+   </tr>`).join('') +
+  `<tr><td colspan='3' class='font-extrabold text-right'>Total:</td><td class='text-red-600 font-extrabold'>Rs. ${expTotal()}</td></tr></tbody></table>`;
+ actions.classList.remove("hidden");
+}
+function downloadExpensePDF() {
+ if(expResults.length === 0) return alert("Pehle list search karein!");
+ makePDF("Expenses List", "Period: " + expRange, ["Date", "Title", "Note / Details", "Amount (Rs)"],
+  expResults.map(e => [e.date, e.title, e.note || "-", e.amount]),
+  ["Total Expenses: Rs. " + expTotal()], "expenses_" + expRange.replace(" to ", "_to_") + ".pdf");
+}
+function shareExpenseWhatsApp() {
+ if(expResults.length === 0) return alert("Pehle list search karein!");
+ let t = `*${db.settings.shopName} - Expenses*\nPeriod: ${expRange}\n\n`;
+ expResults.forEach(e => { t += `${e.date} - ${e.title}: Rs. ${e.amount}${e.note ? " (" + e.note + ")" : ""}\n`; });
+ t += `\nTotal: Rs. ${expTotal()}`;
+ openWhatsApp(t);
+}
+function searchRouteCustomers() {
+ const salesman = document.getElementById("rSalesman").value.toLowerCase();
+ const route = document.getElementById("rRoute").value.toLowerCase();
+ const filtered = db.sales.filter(s => 
+  s.balance > 0 &&
+  (!salesman || (s.salesman && s.salesman.toLowerCase().includes(salesman))) &&
+  (!route || (s.address && s.address.toLowerCase().includes(route)))
+ );
+ const res = document.getElementById("routeResultTable");
+ if(filtered.length === 0) {
+  res.innerHTML = "<p class='text-xs text-slate-400 py-3'>Is Route/Salesman ka koi pending customer nahi mila.</p>";
+  return;
+ }
+ res.innerHTML = LP_TIP + `<table><thead><tr><th>Invoice</th><th>Customer</th><th>Area / Route</th><th>Salesman</th><th>Pending Balance</th></tr></thead><tbody>` +
+  filtered.map(f => `<tr data-lp="sale" data-id="${f.id}"><td class='font-bold text-blue-700'>${esc(f.invoice || '-')}</td><td class='font-bold'>${f.customer}</td><td>${f.address || '-'}</td><td>${f.salesman || '-'}</td><td class='text-red-600 font-bold'>Rs. ${f.balance}</td></tr>`).join('') +
+  `</tbody></table>`;
+}
+function searchStockHistory() {
+ const item = document.getElementById("stkSearch").value.toLowerCase();
+ const res = document.getElementById("stockResultTable");
+ let history = [];
+ db.purchases.forEach(p => {
+  p.items.forEach((i, idx) => {
+   if(!item || i.name.toLowerCase().includes(item)) {
+    history.push({ pid: p.id, idx, date: p.date, invoice: p.invoice, company: p.company, item: i.name, qty: i.qty, price: i.price, unit: i.unit });
+   }
+  });
+ });
+ if(history.length === 0) {
+  res.innerHTML = "<p class='text-xs text-slate-400 py-3'>Is Item ki koi purchase history nahi mili.</p>";
+  return;
+ }
+ const names = [...new Set(history.map(h => h.item))];
+ const summary = names.map(n => {
+  const taken = history.filter(h => h.item === n).reduce((a, b) => a + (Number(b.qty) || 0), 0);
+  const master = findItem(n);
+  const unit = (master && master.unit) || (history.find(h => h.item === n).unit) || "";
+  const remain = master ? Number(master.stock) || 0 : taken;
+  return `<div class="p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-700 mb-1">${esc(n)}: Total <span class="text-blue-600">${taken} ${esc(unit)}</span> liye the, ab <span class="${remain <= LOW_STOCK_LIMIT ? "text-red-600" : "text-emerald-600"}">${remain} ${esc(unit)}</span> bache hain.</div>`;
+ }).join("");
+ res.innerHTML = summary + LP_TIP + `<table><thead><tr><th>Date</th><th>Invoice</th><th>Company Name</th><th>Item</th><th>Qty In</th><th>Buy Rate</th></tr></thead><tbody>` +
+  history.map(h => `<tr data-lp="pitem" data-id="${h.pid}" data-sub="${h.idx}"><td>${h.date}</td><td class='font-bold text-blue-700'>${esc(h.invoice || '-')}</td><td class='font-bold'>${h.company}</td><td>${h.item}</td><td class='font-bold text-emerald-600'>+${h.qty}</td><td>Rs. ${h.price}</td></tr>`).join('') +
+  `</tbody></table>`;
+}
+function filterHistory() {
+ const from = document.getElementById("hFrom").value;
+ const to = document.getElementById("hTo").value;
+ const res = document.getElementById("historyTable");
+ const inR = x => x.date >= from && x.date <= to;
+ const byDate = (a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : 0;
+ const sales = db.sales.filter(inR).sort(byDate);
+ const purchases = db.purchases.filter(inR).sort(byDate);
+ const was = db.wasooli.filter(inR).sort(byDate);
+ if(!sales.length && !purchases.length && !was.length) {
+  res.innerHTML = "<p class='text-xs text-slate-400 py-3'>Is tareekh me koi record nahi mila.</p>";
+  return;
+ }
+ let html = LP_TIP;
+ if(sales.length) html += `<h4 class='text-xs font-extrabold text-blue-700 pt-2 pb-1'>SALES</h4><table><thead><tr><th>Date</th><th>Invoice</th><th>Customer</th><th>Salesman</th><th>Total</th><th>Paid</th><th>Balance</th></tr></thead><tbody>` +
+  sales.map(s => `<tr data-lp="sale" data-id="${s.id}"><td>${s.date}</td><td class='font-bold text-blue-700'>${esc(s.invoice || '-')}</td><td class='font-bold'>${s.customer}</td><td>${s.salesman || '-'}</td><td class='font-bold'>Rs. ${s.total}</td><td class='text-emerald-600 font-bold'>Rs. ${s.paid}</td><td class='text-red-600 font-bold'>Rs. ${s.balance}</td></tr>`).join('') + `</tbody></table>`;
+ if(purchases.length) html += `<h4 class='text-xs font-extrabold text-blue-700 pt-4 pb-1'>PURCHASES</h4><table><thead><tr><th>Date</th><th>Company</th><th>Invoice</th><th>Total</th></tr></thead><tbody>` +
+  purchases.map(p => `<tr data-lp="purchase" data-id="${p.id}"><td>${p.date}</td><td class='font-bold'>${p.company}</td><td class='font-bold text-blue-700'>${esc(p.invoice || '-')}</td><td class='font-bold'>Rs. ${p.total}</td></tr>`).join('') + `</tbody></table>`;
+ if(was.length) html += `<h4 class='text-xs font-extrabold text-blue-700 pt-4 pb-1'>WASOOLI SHEETS</h4><table><thead><tr><th>Date</th><th>Salesman</th><th>Customers</th><th>Total Wasooli</th></tr></thead><tbody>` +
+  was.map(w => `<tr data-lp="wasooli" data-id="${w.id}"><td>${w.date}</td><td class='font-bold'>${w.salesman || '-'}</td><td>${w.list.length}</td><td class='text-emerald-600 font-bold'>Rs. ${wasooliTotal(w)}</td></tr>`).join('') + `</tbody></table>`;
+ res.innerHTML = html;
+}
+function generateSalesmanReport() {
+ const salesman = document.getElementById("repSalesman").value.trim();
+ const out = document.getElementById("salesmanReportOutput");
+ if(!salesman) return alert("Salesman ka naam enter karein!");
+ const sales = db.sales.filter(s => s.salesman && s.salesman.toLowerCase().includes(salesman.toLowerCase()));
+ const totalSales = sales.reduce((a, b) => a + b.total, 0);
+ const totalBalance = sales.reduce((a, b) => a + b.balance, 0);
+ out.innerHTML = `
+  <div class='p-3 bg-slate-50 border rounded-lg space-y-2 text-xs'>
+   <p><b>Salesman Name:</b> ${salesman}</p>
+   <p><b>Total Sales Handled:</b> Rs. ${totalSales}</p>
+   <p><b>Total Pending Recovery in Route:</b> Rs. ${totalBalance}</p>
+  </div>
+ `;
+}
+let execData = null;
+function buildExecutiveData() {
+ const from = document.getElementById("brFrom").value;
+ const to = document.getElementById("brTo").value;
+ if(!from || !to) { alert("From aur To dono date select karein!"); return null; }
+ if(from > to) { alert("From date, To date se pehle honi chahiye!"); return null; }
+ const inRange = x => x.date >= from && x.date <= to;
+ const sum = (arr, f) => arr.filter(inRange).reduce((a, b) => a + (Number(f(b)) || 0), 0);
+ const sales = sum(db.sales, x => x.total);
+ const purchases = sum(db.purchases, x => x.total);
+ const expenses = sum(db.expenses, x => x.amount);
+ const wasooli = db.wasooli.filter(inRange).reduce((a, w) => a + wasooliTotal(w), 0);
+ const pending = sum(db.sales, x => x.balance);
+ return { from, to, sales, purchases, expenses, wasooli, pending, net: sales - expenses };
+}
+function generateExecutiveReport() {
+ const d = buildExecutiveData();
+ if(!d) return;
+ execData = d;
+ document.getElementById("executiveReportOutput").innerHTML = `
+  <div class='p-3 bg-slate-50 border rounded-lg space-y-2 text-xs'>
+   <p><b>Period:</b> ${d.from} to ${d.to}</p>
+   <p><b>Total Sales:</b> Rs. ${d.sales}</p>
+   <p><b>Total Purchases:</b> Rs. ${d.purchases}</p>
+   <p><b>Total Expenses:</b> Rs. ${d.expenses}</p>
+   <p><b>Total Wasooli:</b> Rs. ${d.wasooli}</p>
+   <p><b>Pending Udhaar (is period ki sales ka):</b> Rs. ${d.pending}</p>
+   <p><b>Net (Sales - Expenses):</b> Rs. ${d.net}</p>
+  </div>`;
+}
+function getExecData() { return buildExecutiveData(); }
+function downloadExecutivePDF() {
+ const d = getExecData();
+ if(!d) return;
+ execData = d;
+ makePDF("Business Performance Report", `Period: ${d.from} to ${d.to}`, ["Detail", "Amount (Rs)"],
+  [["Total Sales", d.sales], ["Total Purchases", d.purchases], ["Total Expenses", d.expenses],
+   ["Total Wasooli", d.wasooli], ["Pending Udhaar", d.pending]],
+  ["Net (Sales - Expenses): Rs. " + d.net], `business_report_${d.from}_to_${d.to}.pdf`);
+}
+function shareExecutiveWhatsApp() {
+ const d = getExecData();
+ if(!d) return;
+ openWhatsApp(`*${db.settings.shopName} - Business Report*\nPeriod: ${d.from} to ${d.to}\n\nSales: Rs. ${d.sales}\nPurchases: Rs. ${d.purchases}\nExpenses: Rs. ${d.expenses}\nWasooli: Rs. ${d.wasooli}\nPending Udhaar: Rs. ${d.pending}\n\n*Net (Sales - Expenses): Rs. ${d.net}*`);
+}
+function openWhatsApp(text, phone) {
+ const enc = encodeURIComponent(text);
+ const ph = phone ? phone.replace(/\D/g, "") : "";
+ const webUrl = "https://wa.me/" + ph + "?text=" + enc;
+ const appUrl = "whatsapp://send?" + (ph ? "phone=" + ph + "&" : "") + "text=" + enc;
+ if(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+  window.location.href = appUrl;
+  setTimeout(() => { if(!document.hidden) window.open(webUrl, "_blank"); }, 1500);
+ } else {
+  window.open(webUrl, "_blank");
+ }
+}
+function makePDF(title, subtitle, head, body, totals, filename) {
+ if(!window.jspdf) return alert("PDF library load nahi hui. Internet check karein aur dobara try karein.");
+ const doc = new window.jspdf.jsPDF();
+ doc.setFontSize(16); doc.text(db.settings.shopName, 14, 16);
+ doc.setFontSize(12); doc.text(title, 14, 24);
+ doc.setFontSize(10); doc.text(subtitle, 14, 30);
+ doc.autoTable({ startY: 35, head: [head], body: body, headStyles: { fillColor: [15, 23, 42] } });
+ let y = doc.lastAutoTable.finalY + 10;
+ doc.setFontSize(11);
+ totals.forEach(l => { if(y > 280) { doc.addPage(); y = 20; } doc.text(l, 14, y); y += 7; });
+ doc.save(filename);
+}
+function downloadFormattedPDFBackup() {
+ const blob = new Blob([JSON.stringify(db, null, 2)], { type: "application/json" });
+ const a = document.createElement("a");
+ a.href = URL.createObjectURL(blob);
+ a.download = "kiryana_formatted_backup_" + today() + ".json";
+ a.click();
+}
+function saveConfig() {
+ const shop = document.getElementById("cfgShop").value.trim();
+ const user = document.getElementById("cfgUser").value.trim();
+ if(!shop) return alert("Shop Name khali nahi ho sakta!");
+ if(user.length < 3) return alert("Username kam az kam 3 huroof ka ho!");
+ db.settings.shopName = shop;
+ db.settings.username = user;
+ save();
+ applyBranding();
+ alert("Settings Saved!");
+}
+
+const AUTH_KEY = "kiryana_auth_v2", SESSION_KEY = "kiryana_session_ok", DEFAULT_PASS = "9143";
+function getAuth() { try { return JSON.parse(localStorage.getItem(AUTH_KEY)); } catch(e) { return null; } }
+function randSalt() {
+ if(window.crypto && crypto.getRandomValues) return Array.from(crypto.getRandomValues(new Uint8Array(16))).map(b => b.toString(16).padStart(2, "0")).join("");
+ return String(Math.random()).slice(2) + Date.now();
+}
+async function hashPw(pw, salt, basic) {
+ const data = salt + "::" + pw;
+ if(!basic && window.crypto && crypto.subtle) {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(data));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+ }
+ let h = 5381;
+ for(const c of data) h = ((h << 5) + h + c.charCodeAt(0)) | 0;
+ return "f" + h;
+}
+async function verifyPassword(pw) {
+ const a = getAuth();
+ if(!a) return pw === DEFAULT_PASS;
+ return (await hashPw(pw, a.salt, a.hash.startsWith("f"))) === a.hash;
+}
+function applyBranding() {
+ const n = db.settings.shopName;
+ document.getElementById("topShopTitle").innerText = n;
+ document.getElementById("authShop").innerText = n;
+ document.title = n;
+ document.getElementById("cfgShop").value = n;
+ document.getElementById("cfgUser").value = db.settings.username;
+}
+function authError(msg) {
+ const m = document.getElementById("authMsg");
+ m.innerText = msg; m.classList.toggle("hidden", !msg);
+}
+function showLogin() {
+ document.getElementById("authScreen").classList.remove("hidden");
+ document.getElementById("authUser").value = db.settings.username;
+ document.getElementById("authPass").value = "";
+ authError("");
+ setTimeout(() => document.getElementById("authPass").focus(), 50);
+}
+async function authSubmit() {
+ const username = document.getElementById("authUser").value.trim();
+ const pass = document.getElementById("authPass").value;
+ if(!username || !pass) return authError("Username aur Password dono likhein!");
+ if(username.toLowerCase() !== db.settings.username.toLowerCase()) return authError("Wrong Username! Username sahi likhein.");
+ if(!(await verifyPassword(pass))) {
+  document.getElementById("authPass").value = "";
+  return authError("Wrong Password! Dobara koshish karein.");
+ }
+ enterApp();
+}
+function enterApp() {
+ sessionStorage.setItem(SESSION_KEY, "1");
+ document.getElementById("authScreen").classList.add("hidden");
+ document.getElementById("authPass").value = "";
+ window.scrollTo(0, 0);
+}
+function logout() {
+ sessionStorage.removeItem(SESSION_KEY);
+ showLogin();
+}
+async function changePassword() {
+ const oldP = document.getElementById("cpOld").value;
+ const newP = document.getElementById("cpNew").value;
+ const newP2 = document.getElementById("cpNew2").value;
+ if(!oldP || !newP || !newP2) return alert("Teeno khane bharein!");
+ if(!(await verifyPassword(oldP))) return alert("Wrong Password! Purana password galat hai.");
+ if(newP.length < 4) return alert("Naya password kam az kam 4 huroof ka ho.");
+ if(newP !== newP2) return alert("Naye password dono jagah same likhein!");
+ if(newP === oldP) return alert("Naya password purane se alag rakhein.");
+ const salt = randSalt();
+ localStorage.setItem(AUTH_KEY, JSON.stringify({ salt, hash: await hashPw(newP, salt) }));
+ ["cpOld", "cpNew", "cpNew2"].forEach(id => document.getElementById(id).value = "");
+ alert("Password Change Ho Gaya! Agli baar naye password se login karein.");
+}
+applyBranding();
+if(sessionStorage.getItem(SESSION_KEY) === "1") document.getElementById("authScreen").classList.add("hidden");
+else showLogin();
+
+const LP_TIP = "<p class='text-[11px] text-slate-400 pb-2'>Tip: kisi bhi row ko lamba dabayen (long press) - Edit / Delete ka option aayega.</p>";
+let lpTimer = null, lpCur = null, lpOpenedAt = 0, lpStart = { x: 0, y: 0 }, editSaveFn = null;
+function esc(v) { return String(v == null ? "" : v).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;"); }
+function lpFind(el) { return el && el.closest ? el.closest("[data-lp]") : null; }
+function lpBegin(e) {
+ const t = lpFind(e.target);
+ if(!t) return;
+ const p = e.touches ? e.touches[0] : e;
+ lpStart = { x: p.clientX, y: p.clientY };
+ clearTimeout(lpTimer);
+ lpTimer = setTimeout(() => { if(navigator.vibrate) navigator.vibrate(30); openLpMenu(t); }, 550);
+}
+function lpCancel() { clearTimeout(lpTimer); }
+function lpMove(e) {
+ const p = e.touches ? e.touches[0] : e;
+ if(Math.abs(p.clientX - lpStart.x) > 10 || Math.abs(p.clientY - lpStart.y) > 10) lpCancel();
+}
+document.addEventListener("touchstart", lpBegin, { passive: true });
+document.addEventListener("touchmove", lpMove, { passive: true });
+document.addEventListener("touchend", lpCancel);
+document.addEventListener("touchcancel", lpCancel);
+document.addEventListener("mousedown", e => { if(e.button === 0) lpBegin(e); });
+document.addEventListener("mousemove", e => { if(e.buttons) lpMove(e); });
+document.addEventListener("mouseup", lpCancel);
+document.addEventListener("contextmenu", e => {
+ const t = lpFind(e.target);
+ if(t) { e.preventDefault(); openLpMenu(t); }
+});
+function lpRecord(type, id) {
+ id = Number(id);
+ if(type === "expense") return db.expenses.find(x => x.id === id);
+ if(type === "sale") return db.sales.find(x => x.id === id);
+ if(type === "purchase" || type === "pitem") return db.purchases.find(x => x.id === id);
+ if(type === "wasooli") return db.wasooli.find(x => x.id === id);
+ if(type === "salesman") return db.salesmen.find(x => x.id === id);
+}
+function lpTitle(c, r) {
+ if(c.type === "expense") return r.title + " - Rs. " + r.amount;
+ if(c.type === "sale") return (r.invoice ? r.invoice + " - " : "") + r.customer + " - Rs. " + r.total;
+ if(c.type === "purchase") return (r.invoice ? r.invoice + " - " : "") + r.company + " - Rs. " + r.total;
+ if(c.type === "pitem") return (r.items[c.sub] ? r.items[c.sub].name : "Item") + " (" + (r.invoice ? r.invoice + ", " : "") + r.company + ")";
+ if(c.type === "salesman") return r.name + (r.phone ? " - " + r.phone : "");
+ return "Wasooli Sheet " + r.date + " - Rs. " + wasooliTotal(r);
+}
+function openLpMenu(t) {
+ if(!document.getElementById("lpMenu").classList.contains("hidden")) return;
+ const c = { type: t.dataset.lp, id: t.dataset.id, sub: Number(t.dataset.sub) };
+ const r = lpRecord(c.type, c.id);
+ if(!r) return;
+ lpCur = c;
+ lpOpenedAt = Date.now();
+ document.getElementById("lpTitle").innerText = lpTitle(c, r);
+ document.getElementById("lpMenu").classList.remove("hidden");
+}
+function closeLp() { document.getElementById("lpMenu").classList.add("hidden"); }
+function refreshLists() {
+ if(expSearched) searchExpenses(true);
+ if(document.getElementById("historyTable").innerHTML.trim()) filterHistory();
+ if(document.getElementById("routeResultTable").innerHTML.trim()) searchRouteCustomers();
+ if(document.getElementById("stockResultTable").innerHTML.trim()) searchStockHistory();
+ renderSalesmanMasterList();
+ renderCurrentStockList();
+ refreshInvoiceFields();
+ refreshDashboard();
+}
+function lpDelete() {
+ if(Date.now() - lpOpenedAt < 400) return;
+ const c = lpCur;
+ closeLp();
+ const r = lpRecord(c.type, c.id);
+ if(!r) return;
+ if(!confirm('"' + lpTitle(c, r) + '" ko delete karna chahte hain?')) return;
+ const id = Number(c.id);
+ if(c.type === "expense") db.expenses = db.expenses.filter(x => x.id !== id);
+ else if(c.type === "sale") { adjustStockForSaleItems(r.items, 1); db.sales = db.sales.filter(x => x.id !== id); }
+ else if(c.type === "wasooli") db.wasooli = db.wasooli.filter(x => x.id !== id);
+ else if(c.type === "purchase") db.purchases = db.purchases.filter(x => x.id !== id);
+ else if(c.type === "salesman") db.salesmen = db.salesmen.filter(x => x.id !== id);
+ else if(c.type === "pitem") {
+  const removed = r.items[c.sub];
+  if(removed) { const it = db.items[itemKey(removed.name)]; if(it) it.stock = (Number(it.stock) || 0) - Number(removed.qty || 0); }
+  r.items.splice(c.sub, 1);
+  if(r.items.length === 0) db.purchases = db.purchases.filter(x => x.id !== id);
+  else r.total = r.items.reduce((a, b) => a + b.total, 0);
+ }
+ save();
+ refreshLists();
+}
+function openEdit(title, rows, fn) {
+ document.getElementById("editTitle").innerText = title;
+ document.getElementById("editBody").innerHTML = rows.map(r =>
+  `<div><label class="text-xs font-bold text-slate-600 mb-1 block">${r.label}</label><div class="grid gap-2" style="grid-template-columns:repeat(${r.inputs.length},minmax(0,1fr))">` +
+  r.inputs.map(i => `<input id="ef_${i.id}" type="${i.type}" placeholder="${esc(i.ph || "")}" value="${esc(i.value)}"${i.ro ? " readonly tabindex=\"-1\"" : ""}>`).join("") + `</div></div>`).join("");
+ editSaveFn = fn;
+ document.getElementById("editModal").classList.remove("hidden");
+}
+function closeEdit() { document.getElementById("editModal").classList.add("hidden"); editSaveFn = null; }
+function editSave() {
+ const v = id => document.getElementById("ef_" + id).value;
+ if(editSaveFn && editSaveFn(v) !== false) closeEdit();
+}
+function itemRows(items) {
+ return items.map((it, i) => ({ label: "Item " + (i + 1) + " (naam khali karein to item hat jayega)", inputs: [
+  { id: "n" + i, type: "text", ph: "Naam", value: it.name },
+  { id: "q" + i, type: "number", ph: "Qty", value: it.qty },
+  { id: "p" + i, type: "number", ph: "Price", value: it.price }] }));
+}
+function readItems(count, v) {
+ const out = [];
+ for(let i = 0; i < count; i++) {
+  const name = v("n" + i).trim(), qty = Number(v("q" + i)) || 0, price = Number(v("p" + i)) || 0;
+  if(name && qty > 0) out.push({ name, qty, price, total: qty * price });
+ }
+ return out;
+}
+function lpEdit() {
+ if(Date.now() - lpOpenedAt < 400) return;
+ const c = lpCur;
+ closeLp();
+ const r = lpRecord(c.type, c.id);
+ if(!r) return;
+ const one = (label, id, type, value, ro) => ({ label, inputs: [{ id, type, value, ro }] });
+ if(c.type === "expense") {
+  openEdit("Expense Edit Karein", [one("Expense Title", "title", "text", r.title), one("Amount (Rs)", "amount", "number", r.amount), one("Date", "date", "date", r.date), one("Note / Details", "note", "text", r.note)], v => {
+   const title = v("title").trim(), amount = Number(v("amount")) || 0;
+   if(!title || amount <= 0) { alert("Expense Title aur Amount sahi enter karein!"); return false; }
+   r.title = title; r.amount = amount; r.date = v("date"); r.note = v("note").trim();
+   save(); refreshLists();
+  });
+ } else if(c.type === "sale") {
+  const n = r.items.length;
+  openEdit("Sale Edit Karein", [one("Invoice No (auto)", "inv", "text", r.invoice, true), one("Date", "date", "date", r.date), one("Customer", "customer", "text", r.customer), one("Area / Route", "address", "text", r.address), one("Salesman", "salesman", "text", r.salesman), ...itemRows(r.items), one("Cash Received (Paid)", "paid", "number", r.paid)], v => {
+   const items = readItems(n, v);
+   if(!items.length) { alert("Kam az kam ek item hona chahiye!"); return false; }
+   const customer = v("customer").trim() || "Walk-in", salesman = v("salesman").trim();
+   const errors = [];
+   if(customer !== "Walk-in" && !findCustomer(customer)) errors.push(`Customer "${customer}" system mein save nahi hai.`);
+   if(salesman && !findSalesman(salesman)) errors.push(`Salesman "${salesman}" system mein save nahi hai.`);
+   items.forEach(i => { if(!findItem(i.name)) errors.push(`Item "${i.name}" system mein save nahi hai.`); });
+   if(errors.length) { alert(errors.join("\n")); return false; }
+   adjustStockForSaleItems(r.items, 1);
+   r.date = v("date"); r.customer = customer; r.address = v("address").trim(); r.salesman = salesman;
+   r.items = items; r.total = items.reduce((a, b) => a + b.total, 0); r.paid = Number(v("paid")) || 0; r.balance = r.total - r.paid;
+   adjustStockForSaleItems(r.items, -1);
+   save(); refreshLists();
+  });
+ } else if(c.type === "salesman") {
+  openEdit("Salesman Edit Karein", [one("Salesman Name", "name", "text", r.name), one("Mobile Number", "phone", "text", r.phone)], v => {
+   const name = v("name").trim();
+   if(!name) { alert("Salesman ka naam khali nahi ho sakta!"); return false; }
+   r.name = name; r.phone = v("phone").trim();
+   save(); refreshLists();
+  });
+ } else if(c.type === "purchase") {
+  const n = r.items.length;
+  openEdit("Purchase Edit Karein", [one("Date", "date", "date", r.date), one("Company / Supplier", "company", "text", r.company), one("Invoice No (auto)", "invoice", "text", r.invoice, true), ...itemRows(r.items)], v => {
+   const items = readItems(n, v), company = v("company").trim();
+   if(!company || !items.length) { alert("Company Name aur kam az kam ek item zaroori hai!"); return false; }
+   r.date = v("date"); r.company = company;
+   r.items = items; r.total = items.reduce((a, b) => a + b.total, 0);
+   save(); refreshLists();
+  });
+ } else if(c.type === "pitem") {
+  const it = r.items[c.sub];
+  openEdit("Item Edit Karein", [{ label: "Item (Naam / Qty / Buy Price)", inputs: [
+   { id: "n0", type: "text", ph: "Naam", value: it.name }, { id: "q0", type: "number", ph: "Qty", value: it.qty }, { id: "p0", type: "number", ph: "Price", value: it.price }] }], v => {
+   const x = readItems(1, v);
+   if(!x.length) { alert("Item ka naam aur Qty sahi likhein!"); return false; }
+   const oldKey = itemKey(it.name), oldQty = Number(it.qty) || 0;
+   const oldStockRec = db.items[oldKey];
+   if(oldStockRec) oldStockRec.stock = (Number(oldStockRec.stock) || 0) - oldQty;
+   const updated = { ...x[0], unit: it.unit, sell: it.sell };
+   r.items[c.sub] = updated; r.total = r.items.reduce((a, b) => a + b.total, 0);
+   upsertItemFromPurchase(updated);
+   save(); refreshLists();
+  });
+ } else if(c.type === "wasooli") {
+  const n = r.list.length;
+  openEdit("Wasooli Sheet Edit Karein", [one("Date", "date", "date", r.date), one("Salesman", "salesman", "text", r.salesman), ...r.list.map((x, i) => ({ label: "Customer " + (i + 1) + " (naam khali karein to hat jayega)", inputs: [{ id: "c" + i, type: "text", ph: "Customer", value: x.customer }, { id: "a" + i, type: "number", ph: "Amount", value: x.amount }] }))], v => {
+   const list = [];
+   for(let i = 0; i < n; i++) { const customer = v("c" + i).trim(), amount = Number(v("a" + i)) || 0; if(customer && amount > 0) list.push({ customer, amount }); }
+   if(!list.length) { alert("Kam az kam ek customer entry zaroori hai!"); return false; }
+   r.date = v("date"); r.salesman = v("salesman").trim(); r.list = list;
+   save(); refreshLists();
+  });
+ }
+}
+</script>
+</body>
+</html>
